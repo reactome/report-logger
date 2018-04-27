@@ -17,15 +17,15 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @RestController
-@RequestMapping("/report")
-public class ReportController {
+@RequestMapping("/search")
+public class SearchLoggerController {
 
     private TargetService targetService;
     private UserAgentService userAgentService;
 
     private UserAgentStringParser parser;
 
-    public ReportController() {
+    public SearchLoggerController() {
         parser = UADetectorServiceFactory.getResourceModuleParser();
     }
 

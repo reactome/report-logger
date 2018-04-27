@@ -162,7 +162,7 @@
     </repositories>
 
     <build>
-        <finalName>content</finalName>
+        <finalName>report</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
