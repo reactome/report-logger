@@ -175,7 +175,7 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <path>${deploymentPath}</path>
+                    <path>${deploymentPath}${build.finalName}</path>
                     <port>5050</port>
                 </configuration>
             </plugin>
