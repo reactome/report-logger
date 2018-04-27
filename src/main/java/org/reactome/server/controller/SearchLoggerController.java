@@ -29,6 +29,14 @@ public class SearchLoggerController {
         parser = UADetectorServiceFactory.getResourceModuleParser();
     }
 
+    // TODO AUTH IN THE HEADER.
+
+    @GetMapping(value = "/testme")
+    @ResponseStatus(value = HttpStatus.OK)
+    public String testMe(){
+        return "This is a test";
+    }
+
     @PostMapping(value = "/targets", consumes = {MediaType.TEXT_PLAIN_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(value = HttpStatus.OK)
     public void saveAll(@RequestBody String terms,
