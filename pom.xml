@@ -17,6 +17,7 @@
     <properties>
         <deploymentPath>/</deploymentPath>
         <spring.version>5.0.5.RELEASE</spring.version>
+        <mysql.connector.version>8.0.11</mysql.connector.version>
         <hibernate.version>5.2.16.Final</hibernate.version>
         <hibernate.validator.version>6.0.9.Final</hibernate.validator.version>
         <spring.data.jpa.version>2.0.6.RELEASE</spring.data.jpa.version>
@@ -86,7 +87,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.39</version>
+            <version>${mysql.connector.version}</version>
         </dependency>
         <!-- Servlet -->
         <dependency>
