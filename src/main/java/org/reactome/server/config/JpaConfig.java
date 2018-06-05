@@ -3,10 +3,12 @@ package org.reactome.server.config;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.sql.DataSource;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -75,6 +77,8 @@ class JpaConfig {
         jpaProperties.put(Environment.SHOW_SQL, showSql);
         jpaProperties.put(Environment.FORMAT_SQL, formatSql);
         jpaProperties.put(Environment.USE_SQL_COMMENTS, useSqlComments);
+        jpaProperties.put(Environment.HBM2DDL_DELIMITER, ";");
+        System.setProperty("hibernate.dialect.storage_engine", "innodb");
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
         return entityManagerFactoryBean;
     }

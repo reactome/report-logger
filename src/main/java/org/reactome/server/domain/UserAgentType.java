@@ -1,6 +1,4 @@
-package org.reactome.server.target;
-
-import org.springframework.util.StringUtils;
+package org.reactome.server.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,21 +9,26 @@ import java.util.Objects;
  */
 
 @Entity
-@Table(name="useragenttype")
-public class UserAgentType implements Serializable{
+@Table(
+    name="USER_AGENT_TYPE",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            columnNames = {"NAME"},
+            name="UK_UAT_NAME"
+        )
+    }
+)
+public class UserAgentType implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "NAME", nullable = false)
     private String name;
 
-    // Maybe the bidirectional here with targets....
-
-
-    public UserAgentType() {
-    }
+    public UserAgentType() {}
 
     public UserAgentType(String name) {
         setName(name);
@@ -57,7 +60,6 @@ public class UserAgentType implements Serializable{
 
     @Override
     public int hashCode() {
-
         return Objects.hash(name);
     }
 }

@@ -1,42 +1,41 @@
-package org.reactome.server.target;
+package org.reactome.server.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-@SuppressWarnings("serial")
-@Entity
-@Table(name = "report")
-public class Target implements Serializable {
+@MappedSuperclass
+public abstract class AbstractRecord implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "ID")
+    protected Long id;
 
-    @Column(nullable = false)
-    private String term;
+    @Column(name = "NAME", nullable = false, length = 2048)
+    protected String term;
 
-    private String ip;
+    @Column(name = "IP_ADDRESS", length = 16)
+    protected String ip;
 
-    @Column(name = "releaseNumber") // release is keyword in MySQL
-    private Integer releaseNumber;
+    @Column(name = "RELEASE_NUMBER") // release is keyword in MySQL
+    protected Integer releaseNumber;
 
-    private String userAgent;
+    @Column(name = "USER_AGENT", length = 512)
+    protected String userAgent;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Date created;
+    @Column(name = "CREATED", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    protected Date created;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "type_id")
-    private UserAgentType userAgentType;
+    @JoinColumn(name = "UATYPE_ID")
+    protected UserAgentType userAgentType;
 
-    public Target(String term) {
-        this.term = term;
-    }
+    AbstractRecord() {}
 
-    public Target(String term, String ip, String userAgent, Integer releaseNumber, UserAgentType userAgentType) {
+    public AbstractRecord(String term, String ip, String userAgent, Integer releaseNumber, UserAgentType userAgentType) {
         this.term = term;
         this.ip = ip;
         this.userAgent = userAgent;
@@ -104,7 +103,7 @@ public class Target implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Target target = (Target) o;
+        AbstractRecord target = (AbstractRecord) o;
         return Objects.equals(term, target.term);
     }
 

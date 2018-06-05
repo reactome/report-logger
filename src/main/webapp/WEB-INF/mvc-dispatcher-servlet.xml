@@ -17,12 +17,5 @@
     <tx:annotation-driven/>
 
     <context:component-scan base-package="org.reactome.server"/>
-    <!--<context:property-placeholder location="classpath:/core.properties" ignore-unresolvable="true" />-->
-
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/pages/"/>
-        <property name="suffix" value=".jsp"/>
-        <property name="redirectHttp10Compatible" value="false" />
-    </bean>
 
 </beans>

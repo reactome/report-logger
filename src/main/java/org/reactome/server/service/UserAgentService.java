@@ -1,12 +1,11 @@
-package org.reactome.server.target;
+package org.reactome.server.service;
 
+import org.reactome.server.repository.UserAgentRepository;
+import org.reactome.server.domain.UserAgentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collection;
 
 @Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
