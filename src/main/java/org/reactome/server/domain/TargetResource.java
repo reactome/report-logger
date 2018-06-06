@@ -10,20 +10,20 @@ import java.util.Objects;
 
 @Entity
 @Table(
-    name="TARGET_RESOURCE",
-    uniqueConstraints = { @UniqueConstraint(columnNames = {"NAME"}, name="UK_TR_NAME") }
+    name="target_resource",
+    uniqueConstraints = { @UniqueConstraint(columnNames = {"name"}, name="UK_TR_NAME") }
 )
 public class TargetResource implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "ALTERNATIVE_NAMES")
+    @Column(name = "alternative_names")
     private String alternativeNames;
 
     public TargetResource() {

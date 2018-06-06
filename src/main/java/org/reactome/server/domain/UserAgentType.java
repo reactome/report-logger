@@ -10,10 +10,10 @@ import java.util.Objects;
 
 @Entity
 @Table(
-    name="USER_AGENT_TYPE",
+    name="user_agent_type",
     uniqueConstraints = {
         @UniqueConstraint(
-            columnNames = {"NAME"},
+            columnNames = {"name"},
             name="UK_UAT_NAME"
         )
     }
@@ -22,10 +22,10 @@ public class UserAgentType implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     public UserAgentType() {}

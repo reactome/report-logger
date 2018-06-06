@@ -10,27 +10,27 @@ public abstract class AbstractRecord implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "id")
     protected Long id;
 
-    @Column(name = "NAME", nullable = false, length = 2048)
+    @Column(name = "term", nullable = false, length = 2048)
     protected String term;
 
-    @Column(name = "IP_ADDRESS", length = 16)
+    @Column(name = "ip_address", length = 16)
     protected String ip;
 
-    @Column(name = "RELEASE_NUMBER") // release is keyword in MySQL
+    @Column(name = "release_number") // release is keyword in MySQL
     protected Integer releaseNumber;
 
-    @Column(name = "USER_AGENT", length = 512)
+    @Column(name = "user_agent", length = 512)
     protected String userAgent;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     protected Date created;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "UATYPE_ID")
+    @JoinColumn(name = "uatype_id")
     protected UserAgentType userAgentType;
 
     AbstractRecord() {}

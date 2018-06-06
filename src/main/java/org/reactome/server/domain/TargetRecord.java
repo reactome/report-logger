@@ -4,14 +4,14 @@ import javax.persistence.*;
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "REPORT")
+@Table(name = "target")
 @AssociationOverride(name = "userAgentType",
-                     joinColumns = @JoinColumn(name="UATYPE_ID"),
+                     joinColumns = @JoinColumn(name="uatype_id"),
                      foreignKey = @ForeignKey(name = "FK_TR_UAT"))
 public class TargetRecord extends AbstractRecord {
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "RES_ID", foreignKey = @ForeignKey(name = "FK_REP_TR"))
+    @JoinColumn(name = "res_id", foreignKey = @ForeignKey(name = "FK_REP_TR"))
     private TargetResource targetResource;
 
     public TargetRecord() {}
