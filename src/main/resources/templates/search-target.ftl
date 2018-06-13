@@ -16,47 +16,24 @@
 </table>
 
 <div style="padding-left: 20px;">
-<p>Targets - By Term</p>
-<table style="background-color: transparent; border-spacing: 0; border-collapse: collapse; max-width: 100%; margin: 0 6px; width: 300px; border-bottom: 1px solid #e9e9e9;">
-    <thead>
-    <tr>
-        <th style="background-color: #2F9EC2; padding: 6px; font-size: 14px; font-weight: bold; color: #ffffff; width: 20px; border: 1px solid #ccc; text-align: left;">Term</th>
-        <th style="background-color: #2F9EC2; padding: 6px; font-size: 14px; font-weight: bold; color: #ffffff; width: 100px; border: 1px solid #ccc; text-align: left;">Hits</th>
-    </tr>
-    </thead>
-    <tbody>
-    <#list targetSummary as target>
-    <tr style='background-color: ${((target_index % 2)==0)?string("white", "#F6F6F6")}'>
-        <td style="padding: 12px; border: 1px solid #ccc; text-align: left;">${target.term}</td>
-        <td style="padding: 12px; border: 1px solid #ccc; text-align: left;">${target.count}</td>
-    </tr>
-    </#list>
-    </tbody>
-</table>
+    <p>Targets - By Term</p>
+    <table style="background-color: transparent; border-spacing: 0; border-collapse: collapse; max-width: 100%; margin: 0 6px; width: 300px; border-bottom: 1px solid #e9e9e9;">
+        <thead>
+        <tr>
+            <th style="background-color: #2F9EC2; padding: 6px; font-size: 14px; font-weight: bold; color: #ffffff; width: 20px; border: 1px solid #ccc; text-align: left;">Term</th>
+            <th style="background-color: #2F9EC2; padding: 6px; font-size: 14px; font-weight: bold; color: #ffffff; width: 100px; border: 1px solid #ccc; text-align: left;">Hits</th>
+        </tr>
+        </thead>
+        <tbody>
+        <#list targetSummary as target>
+        <tr style='background-color: ${((target_index % 2)==0)?string("white", "#F6F6F6")}'>
+            <td style="padding: 12px; border: 1px solid #ccc; text-align: left;">${target.term}</td>
+            <td style="padding: 12px; border: 1px solid #ccc; text-align: left;">${target.count}</td>
+        </tr>
+        </#list>
+        </tbody>
+    </table>
 
-<p>Targets - Hits by IP</p>
-<table style="background-color: transparent; border-spacing: 0; border-collapse: collapse; max-width: 100%; margin: 0 6px; width: 580px; border-bottom: 1px solid #e9e9e9;">
-    <thead>
-    <tr>
-        <th style="background-color: #2F9EC2; padding: 6px; font-size: 14px; font-weight: bold; color: #ffffff; width: 300px; border: 1px solid #ccc; text-align: left;">Term</th>
-        <th style="background-color: #2F9EC2; padding: 6px; font-size: 14px; font-weight: bold; color: #ffffff; width: 200px; border: 1px solid #ccc; text-align: left;">IP Address</th>
-        <th style="background-color: #2F9EC2; padding: 6px; font-size: 14px; font-weight: bold; color: #ffffff; width: 80px; border: 1px solid #ccc; text-align: left;">Hits</th>
-    </tr>
-    </thead>
-    <tbody>
-    <#list targetsByIp as target>
-    <tr style='background-color: ${((target_index % 2)==0)?string("white", "#F6F6F6")}'>
-        <td style="padding: 12px; border: 1px solid #ccc; text-align: left;">${target.term}</td>
-        <td style="padding: 12px; border: 1px solid #ccc; text-align: left;">${target.ip}</td>
-        <td style="padding: 12px; border: 1px solid #ccc; text-align: left;">${target.count}</td>
-    </tr>
-    </#list>
-    </tbody>
-</table>
-</div>
-
-
-<div style="padding-left: 20px;">
     <p>Terms not found</p>
     <table style="background-color: transparent; border-spacing: 0; border-collapse: collapse; max-width: 100%; margin: 0 6px; width: 300px; border-bottom: 1px solid #e9e9e9;">
         <thead>
@@ -70,6 +47,28 @@
     <tr style='background-color: ${((search_index % 2)==0)?string("white", "#F6F6F6")}'>
         <td style="padding: 12px; border: 1px solid #ccc; text-align: left;">${search.term}</td>
         <td style="padding: 12px; border: 1px solid #ccc; text-align: left;">${search.count}</td>
+    </tr>
+    </#list>
+        </tbody>
+    </table>
+</div>
+
+<div style="padding-left: 20px;">
+    <p>Targets - Hits by IP</p>
+    <table style="background-color: transparent; border-spacing: 0; border-collapse: collapse; max-width: 100%; margin: 0 6px; width: 580px; border-bottom: 1px solid #e9e9e9;">
+        <thead>
+        <tr>
+            <th style="background-color: #2F9EC2; padding: 6px; font-size: 14px; font-weight: bold; color: #ffffff; width: 300px; border: 1px solid #ccc; text-align: left;">Term</th>
+            <th style="background-color: #2F9EC2; padding: 6px; font-size: 14px; font-weight: bold; color: #ffffff; width: 200px; border: 1px solid #ccc; text-align: left;">IP Address</th>
+            <th style="background-color: #2F9EC2; padding: 6px; font-size: 14px; font-weight: bold; color: #ffffff; width: 80px; border: 1px solid #ccc; text-align: left;">Hits</th>
+        </tr>
+        </thead>
+        <tbody>
+    <#list targetsByIp as target>
+    <tr style='background-color: ${((target_index % 2)==0)?string("white", "#F6F6F6")}'>
+        <td style="padding: 12px; border: 1px solid #ccc; text-align: left;">${target.term}</td>
+        <td style="padding: 12px; border: 1px solid #ccc; text-align: left;">${target.ip}</td>
+        <td style="padding: 12px; border: 1px solid #ccc; text-align: left;">${target.count}</td>
     </tr>
     </#list>
         </tbody>
