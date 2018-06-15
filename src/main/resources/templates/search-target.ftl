@@ -16,7 +16,7 @@
 </table>
 
 <div style="padding-left: 20px;">
-    <p>Targets - By Term</p>
+    <p>Targets - By Term (${targetSummary?size})</p>
     <table style="background-color: transparent; border-spacing: 0; border-collapse: collapse; max-width: 100%; margin: 0 6px; width: 300px; border-bottom: 1px solid #e9e9e9;">
         <thead>
         <tr>
@@ -34,7 +34,7 @@
         </tbody>
     </table>
 
-    <p>Terms not found</p>
+    <p>Terms not found (${searchSummary?size})</p>
     <table style="background-color: transparent; border-spacing: 0; border-collapse: collapse; max-width: 100%; margin: 0 6px; width: 300px; border-bottom: 1px solid #e9e9e9;">
         <thead>
         <tr>
@@ -54,7 +54,7 @@
 </div>
 
 <div style="padding-left: 20px;">
-    <p>Targets - Hits by IP</p>
+    <p>Targets - Hits by IP (${targetsByIp?size})</p>
     <table style="background-color: transparent; border-spacing: 0; border-collapse: collapse; max-width: 100%; margin: 0 6px; width: 580px; border-bottom: 1px solid #e9e9e9;">
         <thead>
         <tr>
@@ -74,7 +74,7 @@
         </tbody>
     </table>
 
-    <p>Terms not found - Hits by IP</p>
+    <p>Terms not found - Hits by IP (${searchByIp?size})</p>
     <table style="background-color: transparent; border-spacing: 0; border-collapse: collapse; max-width: 100%; margin: 0 6px; width: 580px; border-bottom: 1px solid #e9e9e9;">
         <thead>
         <tr>
