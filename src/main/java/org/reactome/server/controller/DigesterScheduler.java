@@ -37,7 +37,7 @@ public class DigesterScheduler {
         this.hostname = hostname;
     }
 
-    @Scheduled(cron = "0 12 * * SAT") // every Monday at 07AM
+    @Scheduled(cron = "0 12 * * SAT") // every Saturday at midday
     @ResponseStatus(HttpStatus.OK)
     public void weeklyReport() {
         if (!sendReport()) return;
@@ -54,7 +54,7 @@ public class DigesterScheduler {
         mailService.sendEmail(mail);
     }
 
-    @Scheduled(cron = "0 1 1 * *") // every Monday at 01AM
+    @Scheduled(cron = "0 1 1 * *") // every day 1 at 01AM
     @ResponseStatus(HttpStatus.OK)
     public void monthlyReport() {
         if (!sendReport()) return;
