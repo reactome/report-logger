@@ -3,7 +3,10 @@ package org.reactome.server.controller;
 import net.sf.uadetector.ReadableUserAgent;
 import net.sf.uadetector.UserAgentStringParser;
 import net.sf.uadetector.service.UADetectorServiceFactory;
-import org.reactome.server.domain.*;
+import org.reactome.server.domain.SearchRecord;
+import org.reactome.server.domain.TargetRecord;
+import org.reactome.server.domain.TargetResource;
+import org.reactome.server.domain.UserAgentType;
 import org.reactome.server.service.SearchRecordService;
 import org.reactome.server.service.TargetRecordService;
 import org.reactome.server.service.TargetResourceService;
@@ -53,8 +56,10 @@ public class SearchLoggerController {
         UserAgentType uat = getUserAgentType(agent);
         Collection<TargetRecord> targets = new HashSet<>();
         for (SimpleRecord record : records) {
-            TargetResource tr = getTargetResource(record.getResource());
-            targets.add(new TargetRecord(record.getTerm(), ip, agent, releaseNumber, uat, tr));
+            if (record != null && record.getTerm() != null && record.getTerm().length() >= 3) {
+                TargetResource tr = getTargetResource(record.getResource());
+                targets.add(new TargetRecord(record.getTerm(), ip, agent, releaseNumber, uat, tr));
+            }
         }
         targetRecordService.saveAll(targets);
     }
@@ -68,8 +73,10 @@ public class SearchLoggerController {
                          @RequestParam(required = false) String ip,
                          @RequestParam(required = false) String agent,
                          @RequestParam Integer releaseNumber) {
-        UserAgentType uat = getUserAgentType(agent);
-        searchRecordService.save(new SearchRecord(record.getTerm(), ip, agent, releaseNumber, uat));
+        if (record != null && record.getTerm() != null && record.getTerm().length() >= 3) {
+            UserAgentType uat = getUserAgentType(agent);
+            searchRecordService.save(new SearchRecord(record.getTerm(), ip, agent, releaseNumber, uat));
+        }
     }
 
     private UserAgentType getUserAgentType(String agent) {
