@@ -27,6 +27,7 @@ import java.util.Map;
 @RequestMapping("/digester")
 public class DigesterScheduler {
 
+    private final String mailFrom = "Reactome Report <report@reactome.org>";
     private final String mailTo;
     private TargetDigesterService targetDigesterService;
     private SearchDigesterService searchDigesterService;
@@ -42,7 +43,7 @@ public class DigesterScheduler {
     @Scheduled(cron = "0 0 12 * * SAT") // every Saturday at midday
     public void weeklyReport() {
         if (!sendReport()) return;
-        Mail mail = new Mail("Reactome Report <noreply@reactome.org>", mailTo, "[Search] Weekly report", "search-target.ftl");
+        Mail mail = new Mail(mailFrom, mailTo, "[Search] Weekly report", "search-target.ftl");
         Map<String, Object> model = new HashMap<>();
         model.put("title", "Weekly report");
         model.put("targetSummary", targetDigesterService.findLastWeekTargetsByDateTerm());
@@ -58,7 +59,7 @@ public class DigesterScheduler {
     @Scheduled(cron = "0 0 1 1 * *") // every day 1 at 01AM
     public void monthlyReport() {
         if (!sendReport()) return;
-        Mail mail = new Mail("Reactome Report  <noreply@reactome.org>", mailTo, "[Search] Monthly report", "search-target.ftl");
+        Mail mail = new Mail(mailFrom, mailTo, "[Search] Monthly report", "search-target.ftl");
         Map<String, Object> model = new HashMap<>();
         model.put("title", "Monthly report");
         model.put("targetSummary", targetDigesterService.findLastMonthTargetsByDateTerm());
@@ -76,7 +77,7 @@ public class DigesterScheduler {
     public void testWeeklyReport(@PathVariable(name = "name") String name, @PathVariable(name = "host") String host) {
         if (host.equalsIgnoreCase("reactome.org") || host.equalsIgnoreCase("ebi.ac.uk")) {
             String mailTo = name + "@" + host;
-            Mail mail = new Mail("Reactome Report <noreply@reactome.org>", mailTo, "[Search] Weekly report TEST", "search-target.ftl");
+            Mail mail = new Mail(mailFrom, mailTo, "[Search] Weekly report TEST", "search-target.ftl");
             Map<String, Object> model = new HashMap<>();
             model.put("title", "Weekly report");
             model.put("targetSummary", targetDigesterService.findLastWeekTargetsByDateTerm());
@@ -94,7 +95,7 @@ public class DigesterScheduler {
     public void testMonthlyReport(@PathVariable(name = "name") String name, @PathVariable(name = "host") String host) {
         if (host.equalsIgnoreCase("reactome.org") || host.equalsIgnoreCase("ebi.ac.uk")) {
             String mailTo = name + "@" + host;
-            Mail mail = new Mail("Reactome Report  <noreply@reactome.org>", mailTo, "[Search] Monthly report TEST", "search-target.ftl");
+            Mail mail = new Mail(mailFrom, mailTo, "[Search] Monthly report TEST", "search-target.ftl");
             Map<String, Object> model = new HashMap<>();
             model.put("title", "Monthly report");
             model.put("targetSummary", targetDigesterService.findLastMonthTargetsByDateTerm());
