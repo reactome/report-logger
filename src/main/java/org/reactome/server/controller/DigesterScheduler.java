@@ -27,15 +27,17 @@ import java.util.Map;
 @RequestMapping("/digester")
 public class DigesterScheduler {
 
-    private final String mailFrom = "Reactome Report <report@reactome.org>";
+    private final String mailFrom;
     private final String mailTo;
     private TargetDigesterService targetDigesterService;
     private SearchDigesterService searchDigesterService;
     private MailService mailService;
     private String hostname;
 
-    public DigesterScheduler(@Value("${mail.report}") String mailTo,
+    public DigesterScheduler(@Value("${mail.report.from}") String mailFrom,
+                             @Value("${mail.report.to}") String mailTo,
                              @Value("${mail.report.hostname}") String hostname) {
+        this.mailFrom = "Reactome Report <" + mailFrom + ">";
         this.mailTo = mailTo;
         this.hostname = hostname;
     }
