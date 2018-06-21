@@ -12,7 +12,7 @@
 <div style="padding-left: 20px; padding-top: 15px;">
 
     <h3>TARGETS (${targetTotal})</h3>
-    <h5>Searched terms not found in Reactome but present in Uniprot</h5>
+    <h5>Searched terms not found in Reactome but present in UniProt</h5>
     <table style="background-color: transparent; border-spacing: 0; border-collapse: collapse; max-width: 100%; margin: 0 6px; width: 450px; border-bottom: 1px solid #e9e9e9;">
         <thead>
         <tr>
@@ -32,7 +32,7 @@
         </tbody>
     </table>
 
-    <h4>TARGETS queried ONCE by only ONE user (${targetSingleSummary?size})</h4>
+    <h4>TARGETS queried ONLY by ONE user (${targetSingleSummary?size})</h4>
     <table style="background-color: transparent; border-spacing: 0; table-layout: fixed; border-collapse: collapse; max-width: 800px; margin: 0 6px; width: 800px; border-bottom: 1px solid #e9e9e9;">
         <tbody>
         <tr>
@@ -68,7 +68,7 @@
         </tbody>
     </table>
 
-    <h4>TERMS queried ONCE by only ONE user - (${searchSingleUsersSummary?size})</h4>
+    <h4>TERMS queried ONLY by ONE user (${searchSingleUsersSummary?size})</h4>
     <table style="background-color: transparent; border-spacing: 0; table-layout: fixed; border-collapse: collapse; max-width: 800px; margin: 0 6px; width: 800px; border-bottom: 1px solid #e9e9e9;">
         <tbody>
         <tr>
