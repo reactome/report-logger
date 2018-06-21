@@ -176,7 +176,7 @@ public class DigesterScheduler {
         List<TargetDigester> targetSingleUsersSummary = new ArrayList<>();
 
         for (TargetDigester targetDigester : targetSummary) {
-            if (targetDigester.getUniqueIPs() == 1 && targetDigester.getCount() == 1) {
+            if (targetDigester.getUniqueIPs() == 1) {
                 targetSingleUsersSummary.add(targetDigester);
             } else {
                 targetRelevantSummary.add(targetDigester);
@@ -188,7 +188,7 @@ public class DigesterScheduler {
         List<TargetDigester> searchSingleUsersSummary = new ArrayList<>();
 
         for (TargetDigester targetDigester : searchSummary) {
-            if (targetDigester.getUniqueIPs() == 1 && targetDigester.getCount() == 1) {
+            if (targetDigester.getUniqueIPs() == 1) {
                 searchSingleUsersSummary.add(targetDigester);
             } else {
                 searchRelevantSummary.add(targetDigester);

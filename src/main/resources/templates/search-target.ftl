@@ -32,7 +32,7 @@
         </tbody>
     </table>
 
-    <h4>TARGETS queried ONCE by only ONE user - (${targetSingleSummary?size})</h4>
+    <h4>TARGETS queried ONCE by only ONE user (${targetSingleSummary?size})</h4>
     <table style="background-color: transparent; border-spacing: 0; table-layout: fixed; border-collapse: collapse; max-width: 800px; margin: 0 6px; width: 800px; border-bottom: 1px solid #e9e9e9;">
         <tbody>
         <tr>
