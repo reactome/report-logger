@@ -20,36 +20,7 @@ public class TargetDigesterService {
         this.targetDigesterRepository = targetDigesterRepository;
     }
 
-    public List<TargetDigester> findLastWeekTargetsByDateTermAndIp() {
-        LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
-        Date date = Date.from(lastWeek.atZone(ZoneId.systemDefault()).toInstant());
-        return targetDigesterRepository.findByDateTermAndIp(date);
-    }
-
-    public List<TargetDigester> findLastWeekTargetsByDateTerm() {
-        LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
-        Date date = Date.from(lastWeek.atZone(ZoneId.systemDefault()).toInstant());
-        return targetDigesterRepository.findByDateTerm(date);
-    }
-
-    public List<TargetDigester> findLastMonthTargetsByDateTermAndIp() {
-        LocalDateTime lastMonth = LocalDateTime.now().minusMonths(1);
-        Date date = Date.from(lastMonth.atZone(ZoneId.systemDefault()).toInstant());
-        return targetDigesterRepository.findByDateTermAndIp(date);
-    }
-
-    public List<TargetDigester> findLastMonthTargetsByDateTerm() {
-        LocalDateTime lastMonth = LocalDateTime.now().minusMonths(1);
-        Date date = Date.from(lastMonth.atZone(ZoneId.systemDefault()).toInstant());
-        return targetDigesterRepository.findByDateTerm(date);
-    }
-
-    public List<TargetDigester> findTargetByDateTerm(LocalDateTime localDateTime) {
-        Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-        return targetDigesterRepository.findByDateTerm(date);
-    }
-
-    public List<TargetDigester> findTargetByDateTermAndIp(LocalDateTime localDateTime) {
+    public List<TargetDigester> findTargets(LocalDateTime localDateTime) {
         Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
         return targetDigesterRepository.findByDateTerm(date);
     }

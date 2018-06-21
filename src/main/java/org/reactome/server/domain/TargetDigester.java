@@ -8,32 +8,24 @@ import java.io.Serializable;
 public class TargetDigester implements Serializable {
 
     private String term;
-    private String ip;
     private Long count;
+    private Long uniqueIPs;
 
-    public TargetDigester() {
-    }
-
-    public TargetDigester(String term, Long count) {
+    public TargetDigester(String term, Long count, Long uniqueIPs) {
         this.term = term;
         this.count = count;
-    }
-
-    public TargetDigester(String term, String ip, Long count) {
-        this.term = term;
-        this.ip = ip;
-        this.count = count;
+        this.uniqueIPs = uniqueIPs;
     }
 
     public String getTerm() {
         return term;
     }
 
-    public String getIp() {
-        return ip;
-    }
-
     public Long getCount() {
         return count;
+    }
+
+    public Long getUniqueIPs() {
+        return uniqueIPs;
     }
 }
