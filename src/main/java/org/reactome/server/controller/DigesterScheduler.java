@@ -33,9 +33,9 @@ import java.util.Map;
 public class DigesterScheduler {
 
     private final String MAIL_TEMPLATE = "search-target.ftl";
-    private String mailSubject = "[Search] %s report [%s to %s]";
     private final String mailFrom;
     private final String mailTo;
+    private String mailSubject = "[Search] %s report [%s to %s]";
     private TargetDigesterService targetDigesterService;
     private SearchDigesterService searchDigesterService;
     private MailService mailService;
@@ -112,36 +112,30 @@ public class DigesterScheduler {
         mailService.sendEmail(mail);
     }
 
-    @GetMapping(value = "/weekly201801/{name}/{host:.+}")
+    @GetMapping(value = "/weekly/{email:.+}")
     @ResponseStatus(HttpStatus.OK)
-    public void testWeeklyReport(@PathVariable(name = "name") String name, @PathVariable(name = "host") String host) {
-        if (host.equalsIgnoreCase("reactome.org") || host.equalsIgnoreCase("ebi.ac.uk")) {
-            LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
-            String fromDate = lastWeek.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-            String mailTo = name + "@" + host;
-            Mail mail = new Mail(mailFrom, mailTo, "[Search] Weekly report TEST", MAIL_TEMPLATE);
-            Map<String, Object> model = new HashMap<>();
-            model.put("mailHeader", String.format(mailHeader, "Weekly", fromDate, today));
-            prepareReportList(model, lastWeek);
-            mail.setModel(model);
-            mailService.sendEmail(mail);
-        }
+    public void testWeeklyReport(@PathVariable(name = "email") String email) {
+        LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
+        String fromDate = lastWeek.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        Mail mail = new Mail(mailFrom, email, "[Search] Weekly report TEST", MAIL_TEMPLATE);
+        Map<String, Object> model = new HashMap<>();
+        model.put("mailHeader", String.format(mailHeader, "Weekly", fromDate, today));
+        prepareReportList(model, lastWeek);
+        mail.setModel(model);
+        mailService.sendEmail(mail);
     }
 
-    @GetMapping(value = "/lastmonth201801/{name}/{host:.+}")
+    @GetMapping(value = "/monthly/{email:.+}")
     @ResponseStatus(HttpStatus.OK)
-    public void testMonthlyReport(@PathVariable(name = "name") String name, @PathVariable(name = "host") String host) {
-        if (host.equalsIgnoreCase("reactome.org") || host.equalsIgnoreCase("ebi.ac.uk")) {
-            LocalDateTime lastMonth = LocalDateTime.now().minusMonths(1);
-            String fromDate = lastMonth.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-            String mailTo = name + "@" + host;
-            Mail mail = new Mail(mailFrom, mailTo, "[Search] Monthly report TEST", MAIL_TEMPLATE);
-            Map<String, Object> model = new HashMap<>();
-            model.put("mailHeader", String.format(mailHeader, "Monthly", fromDate, today));
-            prepareReportList(model, lastMonth);
-            mail.setModel(model);
-            mailService.sendEmail(mail);
-        }
+    public void testMonthlyReport(@PathVariable(name = "email") String email) {
+        LocalDateTime lastMonth = LocalDateTime.now().minusMonths(1);
+        String fromDate = lastMonth.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        Mail mail = new Mail(mailFrom, email, "[Search] Monthly report TEST", MAIL_TEMPLATE);
+        Map<String, Object> model = new HashMap<>();
+        model.put("mailHeader", String.format(mailHeader, "Monthly", fromDate, today));
+        prepareReportList(model, lastMonth);
+        mail.setModel(model);
+        mailService.sendEmail(mail);
     }
 
     @Autowired
@@ -170,7 +164,7 @@ public class DigesterScheduler {
         }
     }
 
-    private void prepareReportList(Map<String, Object> model, LocalDateTime date){
+    private void prepareReportList(Map<String, Object> model, LocalDateTime date) {
         List<TargetDigester> targetSummary = targetDigesterService.findTargets(date);
         List<TargetDigester> targetRelevantSummary = new ArrayList<>();
         List<TargetDigester> targetSingleUsersSummary = new ArrayList<>();

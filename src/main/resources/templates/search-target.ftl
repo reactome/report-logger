@@ -38,8 +38,8 @@
         <tr>
         <#assign color="white">
         <#list targetSingleSummary as singleTarget>
-            <#if (singleTarget_index != 0 && singleTarget_index % 8 == 0)> <#if (singleTarget_index % 2)==0 && color =="white"><#assign color="#F6F6F6"><#else> <#assign color="white"></#if></tr><tr style="background-color: ${color}"></#if>
-            <td style="padding: 10px; width: 100px; border: 1px solid #ccc; text-align: left; word-wrap:break-word;"><a href="http://www.uniprot.org/uniprot/?query=${singleTarget.term}" target="_blank">${singleTarget.term}</a></td>
+            <#if (singleTarget_index != 0 && singleTarget_index % 8 == 0)> <#if (singleTarget_index % 2)==0 && color =="white"><#assign color="#F6F6F6"><#else> <#assign color="white"></#if></tr><tr style="background-color: ${color};"></#if>
+            <td style="padding: 10px; width: 100px; border: 1px solid #ccc; text-align: left; word-break: break-all; word-wrap:break-all; -ms-word-wrap: break-all;"><a href="http://www.uniprot.org/uniprot/?query=${singleTarget.term}" target="_blank">${singleTarget.term}</a></td>
         </#list>
         </tr>
         </tbody>
@@ -74,8 +74,8 @@
         <tr>
         <#assign color="white">
         <#list searchSingleUsersSummary as search>
-            <#if (search_index != 0 && search_index % 4 == 0)> <#if (search_index % 2)==0 && color =="white"><#assign color="#F6F6F6"><#else> <#assign color="white"></#if></tr><tr style="background-color: ${color}"></#if>
-            <td style="padding 5px; width: 200px; border: 1px solid #ccc; text-align: left; word-wrap:break-word;">${search.term}</td>
+            <#if (search_index != 0 && search_index % 4 == 0)> <#if (search_index % 2)==0 && color =="white"><#assign color="#F6F6F6"><#else> <#assign color="white"></#if></tr><tr style="background-color: ${color};"></#if>
+            <td style="padding: 5px; width: 200px; border: 1px solid #ccc; text-align: left; word-break: break-all; word-wrap:break-all; -ms-word-wrap: break-all;">${search.term}</td>
         </#list>
         </tr>
         </tbody>

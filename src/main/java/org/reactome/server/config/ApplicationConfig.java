@@ -1,25 +1,19 @@
 package org.reactome.server.config;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-
 import org.reactome.server.Application;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import java.util.Properties;
 
 @Configuration
-@PropertySource(value = {"classpath:persistence.properties", "classpath:mail.properties"})
+@PropertySource(value = {"classpath:persistence.properties", "classpath:report.properties"})
 @ComponentScan(basePackageClasses = Application.class)
+@Import(value = CustomSecurityConfiguration.class)
 class ApplicationConfig {
 
     @Bean
