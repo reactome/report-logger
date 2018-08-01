@@ -7,6 +7,7 @@ import org.reactome.server.util.Mail;
 import org.reactome.server.util.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,6 +31,7 @@ import java.util.Map;
 @Component
 @EnableScheduling
 @RequestMapping("/digester")
+@Scope("prototype")
 public class DigesterScheduler {
 
     private final String MAIL_TEMPLATE = "search-target.ftl";
