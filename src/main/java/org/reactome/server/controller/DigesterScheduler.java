@@ -7,7 +7,6 @@ import org.reactome.server.util.Mail;
 import org.reactome.server.util.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,7 +30,6 @@ import java.util.Map;
 @Component
 @EnableScheduling
 @RequestMapping("/digester")
-@Scope("prototype")
 public class DigesterScheduler {
 
     private final String MAIL_TEMPLATE = "search-target.ftl";
@@ -42,7 +40,6 @@ public class DigesterScheduler {
     private SearchDigesterService searchDigesterService;
     private MailService mailService;
     private String hostname;
-    private String today;
     private String mailHeader = "%s report [%s to %s]";
 
     public DigesterScheduler(@Value("${mail.report.from}") String mailFrom,
@@ -51,13 +48,12 @@ public class DigesterScheduler {
         this.mailFrom = "Reactome Report <" + mailFrom + ">";
         this.mailTo = mailTo;
         this.hostname = hostname;
-        today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     @Scheduled(cron = "0 0 12 * * SAT") // every Saturday at midday
     public void weeklyReport() {
         if (!matchesHostame()) return;
-
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
         String fromDate = lastWeek.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         String subject = String.format(mailSubject, "Weekly", fromDate, today);
@@ -72,7 +68,7 @@ public class DigesterScheduler {
     @Scheduled(cron = "0 0 1 1 * *") // every day 1 at 01AM
     public void monthlyReport() {
         if (!matchesHostame()) return;
-
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDateTime lastMonth = LocalDateTime.now().minusMonths(1);
         String fromDate = lastMonth.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         String subject = String.format(mailSubject, "Monthly", fromDate, today);
@@ -87,7 +83,7 @@ public class DigesterScheduler {
     @Scheduled(cron = "0 0 1 1 Jan,May,Sep *") // every day 1 at 01AM in Jan, May and Sep
     public void quarterlyReport() {
         if (!matchesHostame()) return;
-
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDateTime lastQuarter = LocalDateTime.now().minusMonths(4);
         String fromDate = lastQuarter.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         String subject = String.format(mailSubject, "Quarterly", fromDate, today);
@@ -102,7 +98,7 @@ public class DigesterScheduler {
     @Scheduled(cron = "0 0 1 1 Jan *") // every day 1 at 01AM in January
     public void yearlyReport() {
         if (!matchesHostame()) return;
-
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDateTime lastYear = LocalDateTime.now().minusYears(1);
         String fromDate = lastYear.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         String subject = String.format(mailSubject, "Yearly", fromDate, today);
@@ -117,6 +113,7 @@ public class DigesterScheduler {
     @GetMapping(value = "/weekly/{email:.+}")
     @ResponseStatus(HttpStatus.OK)
     public void testWeeklyReport(@PathVariable(name = "email") String email) {
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
         String fromDate = lastWeek.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         Mail mail = new Mail(mailFrom, email, "[Search] Weekly report TEST", MAIL_TEMPLATE);
@@ -130,6 +127,7 @@ public class DigesterScheduler {
     @GetMapping(value = "/monthly/{email:.+}")
     @ResponseStatus(HttpStatus.OK)
     public void testMonthlyReport(@PathVariable(name = "email") String email) {
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDateTime lastMonth = LocalDateTime.now().minusMonths(1);
         String fromDate = lastMonth.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         Mail mail = new Mail(mailFrom, email, "[Search] Monthly report TEST", MAIL_TEMPLATE);
