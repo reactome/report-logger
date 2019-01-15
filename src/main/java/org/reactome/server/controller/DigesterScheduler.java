@@ -27,6 +27,7 @@ import java.util.Map;
 /**
  * @author Guilherme S Viteri <gviteri@ebi.ac.uk>
  */
+@SuppressWarnings("Duplicates")
 @Component
 @EnableScheduling
 @RequestMapping("/digester")
@@ -138,6 +139,31 @@ public class DigesterScheduler {
         mailService.sendEmail(mail);
     }
 
+    @Scheduled(cron = "0 25 10 * * TUE", zone = "Europe/London") // every Saturday at midday
+    public void cronReport() throws Exception {
+        if (!matchesHostame()) {
+            System.out.println("Running cron report test... hosts are not the same " + InetAddress.getLocalHost().getHostName());
+            return;
+        }
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
+        String fromDate = lastWeek.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String subject = String.format(mailSubject, "Cron Test to help@reactome.org", fromDate, today);
+        Mail mail = new Mail(mailFrom, mailTo, subject, MAIL_TEMPLATE);
+        Map<String, Object> model = new HashMap<>();
+        model.put("mailHeader", String.format(mailHeader, "Cron Test help@reactome.org", fromDate, today));
+        model.put("targetTotal", 1);
+        model.put("targetRelevantSummary", new ArrayList<>());
+        model.put("targetSingleSummary", new ArrayList<>());
+
+        model.put("searchSummaryTotal", 1);
+        model.put("searchRelevantSummary", new ArrayList<>());
+        model.put("searchSingleUsersSummary", new ArrayList<>());
+
+        mail.setModel(model);
+        mailService.sendEmail(mail);
+    }
+
     @Autowired
     public void setTargetDigesterService(TargetDigesterService targetDigesterService) {
         this.targetDigesterService = targetDigesterService;
@@ -156,6 +182,7 @@ public class DigesterScheduler {
     /**
      * hostname has the server name from where we want to send the report.
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean matchesHostame() {
         try {
             return hostname.equalsIgnoreCase(InetAddress.getLocalHost().getHostName());
