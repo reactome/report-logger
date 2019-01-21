@@ -24,9 +24,6 @@ public class AnalysisReportLoggerController {
         parser = UADetectorServiceFactory.getResourceModuleParser();
     }
 
-    /**
-     * To cover cases where term hasn't been found and it is in Reactome scope
-     */
     @GetMapping(value = "/waiting")
     @ResponseStatus(value = HttpStatus.OK)
     public void targets(@RequestParam(required = false) String ip,
@@ -39,7 +36,7 @@ public class AnalysisReportLoggerController {
         analysisReportRecordService.save(arr);
     }
 
-
+    @SuppressWarnings("Duplicates")
     private UserAgentType getUserAgentType(String agent) {
         ReadableUserAgent rua = parser.parse(agent);
         String type = rua.getType().getName();
