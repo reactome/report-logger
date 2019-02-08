@@ -25,4 +25,9 @@ public class SearchDigesterService {
         return searchDigesterRepository.findByDateTerm(date);
     }
 
+    public List<TargetDigester> findSearchesByDates(LocalDateTime fromLDT, LocalDateTime toLDT) {
+        Date fromDate = Date.from(fromLDT.atZone(ZoneId.systemDefault()).toInstant());
+        Date toDate = Date.from(toLDT.atZone(ZoneId.systemDefault()).toInstant());
+        return searchDigesterRepository.findByFromAndToDate(fromDate, toDate);
+    }
 }

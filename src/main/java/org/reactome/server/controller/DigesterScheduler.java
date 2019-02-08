@@ -11,12 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.InetAddress;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -34,6 +32,7 @@ import java.util.Map;
 public class DigesterScheduler {
 
     private final String MAIL_TEMPLATE = "search-target.ftl";
+    private final String DATE_FORMAT = "yyyy-MM-dd";
     private final String mailFrom;
     private final String mailTo;
     private String mailSubject = "[Search] %s report [%s to %s]";
@@ -54,14 +53,14 @@ public class DigesterScheduler {
     @Scheduled(cron = "0 0 12 * * SAT") // every Saturday at midday
     public void weeklyReport() {
         if (!matchesHostame()) return;
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
-        String fromDate = lastWeek.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String fromDate = lastWeek.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         String subject = String.format(mailSubject, "Weekly", fromDate, today);
         Mail mail = new Mail(mailFrom, mailTo, subject, MAIL_TEMPLATE);
         Map<String, Object> model = new HashMap<>();
         model.put("mailHeader", String.format(mailHeader, "Weekly", fromDate, today));
-        prepareReportList(model, lastWeek);
+        getEditorialReports(model, lastWeek);
         mail.setModel(model);
         mailService.sendEmail(mail);
     }
@@ -69,14 +68,14 @@ public class DigesterScheduler {
     @Scheduled(cron = "0 0 1 1 * *") // every day 1 at 01AM
     public void monthlyReport() {
         if (!matchesHostame()) return;
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         LocalDateTime lastMonth = LocalDateTime.now().minusMonths(1);
-        String fromDate = lastMonth.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String fromDate = lastMonth.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         String subject = String.format(mailSubject, "Monthly", fromDate, today);
         Mail mail = new Mail(mailFrom, mailTo, subject, MAIL_TEMPLATE);
         Map<String, Object> model = new HashMap<>();
         model.put("mailHeader", String.format(mailHeader, "Monthly", fromDate, today));
-        prepareReportList(model, lastMonth);
+        getEditorialReports(model, lastMonth);
         mail.setModel(model);
         mailService.sendEmail(mail);
     }
@@ -84,14 +83,14 @@ public class DigesterScheduler {
     @Scheduled(cron = "0 0 1 1 Jan,May,Sep *") // every day 1 at 01AM in Jan, May and Sep
     public void quarterlyReport() {
         if (!matchesHostame()) return;
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         LocalDateTime lastQuarter = LocalDateTime.now().minusMonths(4);
-        String fromDate = lastQuarter.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String fromDate = lastQuarter.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         String subject = String.format(mailSubject, "Quarterly", fromDate, today);
         Mail mail = new Mail(mailFrom, mailTo, subject, MAIL_TEMPLATE);
         Map<String, Object> model = new HashMap<>();
         model.put("mailHeader", String.format(mailHeader, "Quarterly", fromDate, today));
-        prepareReportList(model, lastQuarter);
+        getEditorialReports(model, lastQuarter);
         mail.setModel(model);
         mailService.sendEmail(mail);
     }
@@ -99,14 +98,14 @@ public class DigesterScheduler {
     @Scheduled(cron = "0 0 1 1 Jan *") // every day 1 at 01AM in January
     public void yearlyReport() {
         if (!matchesHostame()) return;
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         LocalDateTime lastYear = LocalDateTime.now().minusYears(1);
-        String fromDate = lastYear.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String fromDate = lastYear.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         String subject = String.format(mailSubject, "Yearly", fromDate, today);
         Mail mail = new Mail(mailFrom, mailTo, subject, MAIL_TEMPLATE);
         Map<String, Object> model = new HashMap<>();
         model.put("mailHeader", String.format(mailHeader, "Yearly", fromDate, today));
-        prepareReportList(model, lastYear);
+        getEditorialReports(model, lastYear);
         mail.setModel(model);
         mailService.sendEmail(mail);
     }
@@ -114,13 +113,13 @@ public class DigesterScheduler {
     @GetMapping(value = "/weekly/{email:.+}")
     @ResponseStatus(HttpStatus.OK)
     public void testWeeklyReport(@PathVariable(name = "email") String email) {
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
-        String fromDate = lastWeek.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String fromDate = lastWeek.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         Mail mail = new Mail(mailFrom, email, "[Search] Weekly report TEST", MAIL_TEMPLATE);
         Map<String, Object> model = new HashMap<>();
         model.put("mailHeader", String.format(mailHeader, "Weekly", fromDate, today));
-        prepareReportList(model, lastWeek);
+        getEditorialReports(model, lastWeek);
         mail.setModel(model);
         mailService.sendEmail(mail);
     }
@@ -128,13 +127,38 @@ public class DigesterScheduler {
     @GetMapping(value = "/monthly/{email:.+}")
     @ResponseStatus(HttpStatus.OK)
     public void testMonthlyReport(@PathVariable(name = "email") String email) {
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         LocalDateTime lastMonth = LocalDateTime.now().minusMonths(1);
-        String fromDate = lastMonth.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        String fromDate = lastMonth.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         Mail mail = new Mail(mailFrom, email, "[Search] Monthly report TEST", MAIL_TEMPLATE);
         Map<String, Object> model = new HashMap<>();
         model.put("mailHeader", String.format(mailHeader, "Monthly", fromDate, today));
-        prepareReportList(model, lastMonth);
+        getEditorialReports(model, lastMonth);
+        mail.setModel(model);
+        mailService.sendEmail(mail);
+    }
+
+
+    /**
+     * Example url - http://localhost/report/digester/custom/johndoe@ebi.ac.uk?fromYMD=2018-01-01&toYMD=2018-12-31&label=Yearly
+     *
+     * @param email    to whom you want to send it
+     * @param fromDate format 2019-01-01
+     * @param toDate   format 2019-01-31
+     * @param label    Free text to appear in the subject, yearly, weekly
+     */
+    @GetMapping(value = "/custom/{email:.+}")
+    @ResponseStatus(HttpStatus.OK)
+    public void testCustomReport(@PathVariable(name = "email") String email, @RequestParam(name = "fromYMD") String fromDate, @RequestParam(name = "toYMD") String toDate, @RequestParam(name = "label") String label) {
+        Mail mail = new Mail(mailFrom, email, "[Search] " + label + " report", MAIL_TEMPLATE);
+        Map<String, Object> model = new HashMap<>();
+        model.put("mailHeader", String.format(mailHeader, label, fromDate, toDate));
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        LocalDateTime fromLDT = LocalDate.parse(fromDate, formatter).atStartOfDay();
+        LocalDateTime toLDT = LocalDate.parse(toDate, formatter).atStartOfDay();
+
+        getCustomReport(model, fromLDT, toLDT);
         mail.setModel(model);
         mailService.sendEmail(mail);
     }
@@ -166,8 +190,19 @@ public class DigesterScheduler {
         }
     }
 
-    private void prepareReportList(Map<String, Object> model, LocalDateTime date) {
+    private void getEditorialReports(Map<String, Object> model, LocalDateTime date) {
         List<TargetDigester> targetSummary = targetDigesterService.findTargets(date);
+        List<TargetDigester> searchSummary = searchDigesterService.findSearches(date);
+        prepareReportModel(model, targetSummary, searchSummary);
+    }
+
+    private void getCustomReport(Map<String, Object> model, LocalDateTime fromLDT, LocalDateTime toLDT) {
+        List<TargetDigester> targetSummary = targetDigesterService.findTargetsByDates(fromLDT, toLDT);
+        List<TargetDigester> searchSummary = searchDigesterService.findSearchesByDates(fromLDT, toLDT);
+        prepareReportModel(model, targetSummary, searchSummary);
+    }
+
+    private void prepareReportModel(Map<String, Object> model, List<TargetDigester> targetSummary, List<TargetDigester> searchSummary) {
         List<TargetDigester> targetRelevantSummary = new ArrayList<>();
         List<TargetDigester> targetSingleUsersSummary = new ArrayList<>();
 
@@ -179,7 +214,6 @@ public class DigesterScheduler {
             }
         }
 
-        List<TargetDigester> searchSummary = searchDigesterService.findSearches(date);
         List<TargetDigester> searchRelevantSummary = new ArrayList<>();
         List<TargetDigester> searchSingleUsersSummary = new ArrayList<>();
 

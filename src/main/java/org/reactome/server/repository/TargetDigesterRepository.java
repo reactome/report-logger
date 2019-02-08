@@ -25,4 +25,14 @@ public interface TargetDigesterRepository extends JpaRepository<TargetRecord, Lo
             "GROUP BY td.term " +
             "ORDER BY count(distinct td.ip) desc, count(td) desc, td.term")
     List<TargetDigester> findByDateTerm(@Param("date")Date date);
+
+
+    @Query(value = "SELECT new org.reactome.server.domain.TargetDigester(td.term, count(td), count(distinct td.ip)) " +
+                    "FROM TargetRecord td " +
+                    "WHERE td.created >= :fromDate " +
+                    "AND   td.created <= :toDate " +
+                    "AND td.userAgentType.name NOT IN ('Robot','UNKNOWN') " +
+                    "GROUP BY td.term " +
+                    "ORDER BY count(distinct td.ip) desc, count(td) desc, td.term")
+    List<TargetDigester> findByFromAndToDate(@Param("fromDate")Date fromDate, @Param("toDate")Date toDate);
 }
