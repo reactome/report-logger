@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.time.format.DateTimeFormatter.ofPattern;
+
 /**
  * @author Guilherme S Viteri <gviteri@ebi.ac.uk>
  */
@@ -53,14 +55,13 @@ public class DigesterScheduler {
     @Scheduled(cron = "0 0 12 * * SAT") // every Saturday at midday
     public void weeklyReport() {
         if (!matchesHostame()) return;
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
         LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
-        String fromDate = lastWeek.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-        String subject = String.format(mailSubject, "Weekly", fromDate, today);
+        LocalDateTime today = LocalDateTime.now();
+        String subject = String.format(mailSubject, "Weekly", lastWeek.format(ofPattern(DATE_FORMAT)), today.format(ofPattern(DATE_FORMAT)));
         Mail mail = new Mail(mailFrom, mailTo, subject, MAIL_TEMPLATE);
         Map<String, Object> model = new HashMap<>();
-        model.put("mailHeader", String.format(mailHeader, "Weekly", fromDate, today));
-        getEditorialReports(model, lastWeek);
+        model.put("mailHeader", String.format(mailHeader, "Weekly", lastWeek.format(ofPattern(DATE_FORMAT)), today.format(ofPattern(DATE_FORMAT))));
+        getEditorialReports(model, lastWeek, today);
         mail.setModel(model);
         mailService.sendEmail(mail);
     }
@@ -68,14 +69,13 @@ public class DigesterScheduler {
     @Scheduled(cron = "0 0 1 1 * *") // every day 1 at 01AM
     public void monthlyReport() {
         if (!matchesHostame()) return;
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-        LocalDateTime lastMonth = LocalDateTime.now().minusMonths(1);
-        String fromDate = lastMonth.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-        String subject = String.format(mailSubject, "Monthly", fromDate, today);
+        LocalDateTime firstDayOfTheMonth = LocalDateTime.now().minusMonths(1);
+        LocalDateTime lastDayOfTheMonth = LocalDateTime.now().minusDays(1);
+        String subject = String.format(mailSubject, "Monthly", firstDayOfTheMonth.format(ofPattern(DATE_FORMAT)), lastDayOfTheMonth.format(ofPattern(DATE_FORMAT)));
         Mail mail = new Mail(mailFrom, mailTo, subject, MAIL_TEMPLATE);
         Map<String, Object> model = new HashMap<>();
-        model.put("mailHeader", String.format(mailHeader, "Monthly", fromDate, today));
-        getEditorialReports(model, lastMonth);
+        model.put("mailHeader", String.format(mailHeader, "Monthly", firstDayOfTheMonth.format(ofPattern(DATE_FORMAT)), lastDayOfTheMonth.format(ofPattern(DATE_FORMAT))));
+        getEditorialReports(model, firstDayOfTheMonth, lastDayOfTheMonth);
         mail.setModel(model);
         mailService.sendEmail(mail);
     }
@@ -83,14 +83,13 @@ public class DigesterScheduler {
     @Scheduled(cron = "0 0 1 1 Jan,May,Sep *") // every day 1 at 01AM in Jan, May and Sep
     public void quarterlyReport() {
         if (!matchesHostame()) return;
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-        LocalDateTime lastQuarter = LocalDateTime.now().minusMonths(4);
-        String fromDate = lastQuarter.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-        String subject = String.format(mailSubject, "Quarterly", fromDate, today);
+        LocalDateTime firstDayOfQuarter = LocalDateTime.now().minusMonths(4);
+        LocalDateTime lastDayOfQuarter = LocalDateTime.now().minusDays(1);
+        String subject = String.format(mailSubject, "Quarterly", firstDayOfQuarter.format(ofPattern(DATE_FORMAT)), lastDayOfQuarter.format(ofPattern(DATE_FORMAT)));
         Mail mail = new Mail(mailFrom, mailTo, subject, MAIL_TEMPLATE);
         Map<String, Object> model = new HashMap<>();
-        model.put("mailHeader", String.format(mailHeader, "Quarterly", fromDate, today));
-        getEditorialReports(model, lastQuarter);
+        model.put("mailHeader", String.format(mailHeader, "Quarterly", firstDayOfQuarter.format(ofPattern(DATE_FORMAT)), lastDayOfQuarter.format(ofPattern(DATE_FORMAT))));
+        getEditorialReports(model, firstDayOfQuarter, lastDayOfQuarter);
         mail.setModel(model);
         mailService.sendEmail(mail);
     }
@@ -98,46 +97,16 @@ public class DigesterScheduler {
     @Scheduled(cron = "0 0 1 1 Jan *") // every day 1 at 01AM in January
     public void yearlyReport() {
         if (!matchesHostame()) return;
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-        LocalDateTime lastYear = LocalDateTime.now().minusYears(1);
-        String fromDate = lastYear.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-        String subject = String.format(mailSubject, "Yearly", fromDate, today);
+        LocalDateTime firstDayOfLastYear = LocalDateTime.now().minusYears(1);
+        LocalDateTime lastDayOfLastYear = LocalDateTime.now().minusDays(1);
+        String subject = String.format(mailSubject, "Yearly", firstDayOfLastYear.format(ofPattern(DATE_FORMAT)), lastDayOfLastYear.format(ofPattern(DATE_FORMAT)));
         Mail mail = new Mail(mailFrom, mailTo, subject, MAIL_TEMPLATE);
         Map<String, Object> model = new HashMap<>();
-        model.put("mailHeader", String.format(mailHeader, "Yearly", fromDate, today));
-        getEditorialReports(model, lastYear);
+        model.put("mailHeader", String.format(mailHeader, "Yearly", firstDayOfLastYear.format(ofPattern(DATE_FORMAT)), lastDayOfLastYear.format(ofPattern(DATE_FORMAT))));
+        getEditorialReports(model, firstDayOfLastYear, lastDayOfLastYear);
         mail.setModel(model);
         mailService.sendEmail(mail);
     }
-
-    @GetMapping(value = "/weekly/{email:.+}")
-    @ResponseStatus(HttpStatus.OK)
-    public void testWeeklyReport(@PathVariable(name = "email") String email) {
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-        LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
-        String fromDate = lastWeek.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-        Mail mail = new Mail(mailFrom, email, "[Search] Weekly report TEST", MAIL_TEMPLATE);
-        Map<String, Object> model = new HashMap<>();
-        model.put("mailHeader", String.format(mailHeader, "Weekly", fromDate, today));
-        getEditorialReports(model, lastWeek);
-        mail.setModel(model);
-        mailService.sendEmail(mail);
-    }
-
-    @GetMapping(value = "/monthly/{email:.+}")
-    @ResponseStatus(HttpStatus.OK)
-    public void testMonthlyReport(@PathVariable(name = "email") String email) {
-        String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-        LocalDateTime lastMonth = LocalDateTime.now().minusMonths(1);
-        String fromDate = lastMonth.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-        Mail mail = new Mail(mailFrom, email, "[Search] Monthly report TEST", MAIL_TEMPLATE);
-        Map<String, Object> model = new HashMap<>();
-        model.put("mailHeader", String.format(mailHeader, "Monthly", fromDate, today));
-        getEditorialReports(model, lastMonth);
-        mail.setModel(model);
-        mailService.sendEmail(mail);
-    }
-
 
     /**
      * Example url - http://localhost/report/digester/custom/johndoe@ebi.ac.uk?fromYMD=2018-01-01&toYMD=2018-12-31&label=Yearly
@@ -154,11 +123,11 @@ public class DigesterScheduler {
         Map<String, Object> model = new HashMap<>();
         model.put("mailHeader", String.format(mailHeader, label, fromDate, toDate));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        DateTimeFormatter formatter = ofPattern(DATE_FORMAT);
         LocalDateTime fromLDT = LocalDate.parse(fromDate, formatter).atStartOfDay();
         LocalDateTime toLDT = LocalDate.parse(toDate, formatter).atStartOfDay();
 
-        getCustomReport(model, fromLDT, toLDT);
+        getEditorialReports(model, fromLDT, toLDT);
         mail.setModel(model);
         mailService.sendEmail(mail);
     }
@@ -190,13 +159,7 @@ public class DigesterScheduler {
         }
     }
 
-    private void getEditorialReports(Map<String, Object> model, LocalDateTime date) {
-        List<TargetDigester> targetSummary = targetDigesterService.findTargets(date);
-        List<TargetDigester> searchSummary = searchDigesterService.findSearches(date);
-        prepareReportModel(model, targetSummary, searchSummary);
-    }
-
-    private void getCustomReport(Map<String, Object> model, LocalDateTime fromLDT, LocalDateTime toLDT) {
+    private void getEditorialReports(Map<String, Object> model, LocalDateTime fromLDT, LocalDateTime toLDT) {
         List<TargetDigester> targetSummary = targetDigesterService.findTargetsByDates(fromLDT, toLDT);
         List<TargetDigester> searchSummary = searchDigesterService.findSearchesByDates(fromLDT, toLDT);
         prepareReportModel(model, targetSummary, searchSummary);
