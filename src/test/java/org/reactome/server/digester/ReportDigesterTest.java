@@ -1,6 +1,5 @@
 package org.reactome.server.digester;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.reactome.server.config.ReportJpaConfig;
@@ -25,7 +24,6 @@ import java.util.List;
 @ContextConfiguration(classes = {ReportJpaConfig.class},
                       loader = AnnotationConfigContextLoader.class)
 @Transactional
-@Ignore
 public class ReportDigesterTest {
 
     @Autowired
@@ -33,9 +31,9 @@ public class ReportDigesterTest {
 
     @Test
     public void weeklyTargetReport() {
-        LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
-        Date date = Date.from(lastWeek.atZone(ZoneId.systemDefault()).toInstant());
-        List<TargetDigester> list = targetDigesterRepository.findByDateTerm(date);
+        Date lastWeek = Date.from(LocalDateTime.now().minusWeeks(1).atZone(ZoneId.systemDefault()).toInstant());
+        Date now = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+        List<TargetDigester> list = targetDigesterRepository.findByFromAndToDate(lastWeek, now);
         for (TargetDigester targetDigester : list) {
             System.out.println(targetDigester.getTerm() + " - " + targetDigester.getUniqueIPs() + " - " + targetDigester.getCount());
         }
