@@ -2,6 +2,7 @@ package org.reactome.server.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -23,6 +24,14 @@ public class OrcidClaim {
 
     @Column(name = "putcode", nullable = false)
     private Long putCode;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created")
+    private Date created;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "last_modified")
+    private Date lastModified;
 
     public OrcidClaim() {
     }
@@ -49,6 +58,22 @@ public class OrcidClaim {
 
     public void setPutCode(Long putCode) {
         this.putCode = putCode;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(Date lastModified) {
+        this.lastModified = lastModified;
     }
 }
 
