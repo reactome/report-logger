@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.hibernate.tool.schema.TargetType.SCRIPT;
 import static org.hibernate.tool.schema.TargetType.STDOUT;
@@ -66,10 +67,10 @@ public class DDLSchemaGenerator {
         System.exit(0);
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @SuppressWarnings({"ResultOfMethodCallIgnored", "Duplicates"})
     private static void create() {
         settings.put(Environment.HBM2DDL_AUTO, "create");
-        String dbFile = dbScript.replace("##action##", "create");
+        String dbFile = dbScript.replace("##action##", "create_"+ UUID.randomUUID());
         File script = new File(dbFile);
         if (script.exists()) script.delete();
 
@@ -87,10 +88,10 @@ public class DDLSchemaGenerator {
         schemaExport.createOnly(EnumSet.of(STDOUT, SCRIPT), metadata);
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @SuppressWarnings({"ResultOfMethodCallIgnored", "Duplicates"})
     private static void update() {
         settings.put(Environment.HBM2DDL_AUTO, "update");
-        String dbFile = dbScript.replace("##action##", "update");
+        String dbFile = dbScript.replace("##action##", "update_"+ UUID.randomUUID());
         File script = new File(dbFile);
         if (script.exists()) script.delete();
 
