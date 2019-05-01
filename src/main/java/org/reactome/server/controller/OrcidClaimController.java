@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orcid")
+@RequestMapping("/orcid/claim")
 public class OrcidClaimController {
 
     private OrcidClaimService orcidClaimService;
