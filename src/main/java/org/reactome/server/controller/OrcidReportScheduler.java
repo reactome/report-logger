@@ -64,7 +64,7 @@ public class OrcidReportScheduler {
         mailService.sendEmail(mail);
     }
 
-    @Scheduled(cron = "0 15 16 * * THU") // every Saturday at midday
+    @Scheduled(cron = "0 0 12 * * SAT") // every Saturday at midday
     public void weeklyReport() {
         if (!matchesHostame()) return;
         LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(2);
