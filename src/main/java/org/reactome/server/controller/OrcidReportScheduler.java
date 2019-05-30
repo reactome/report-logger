@@ -67,8 +67,8 @@ public class OrcidReportScheduler {
     @Scheduled(cron = "0 0 12 * * SAT") // every Saturday at midday
     public void weeklyReport() {
         if (!matchesHostame()) return;
-        LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(2);
-        LocalDateTime today = LocalDateTime.now().minusWeeks(1);
+        LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);
+        LocalDateTime today = LocalDateTime.now();
         String subject = String.format(mailSubject, "Weekly", lastWeek.format(ofPattern(DATE_FORMAT)), today.format(ofPattern(DATE_FORMAT)));
         Mail mail = new Mail(mailFrom, mailTo, subject, MAIL_TEMPLATE);
         Map<String, Object> model = new HashMap<>();
