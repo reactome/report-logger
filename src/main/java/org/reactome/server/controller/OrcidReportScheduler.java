@@ -57,8 +57,9 @@ public class OrcidReportScheduler {
         Mail mail = new Mail(mailFrom, mailTo, subject, MAIL_TEMPLATE);
         Map<String, Object> model = new HashMap<>();
         model.put("mailHeader", String.format(dailyMailHeader, yesterday.format(ofPattern(DATE_FORMAT))));
-        model.put("label", "Claiming for today");
+        model.put("label1", "Claiming for today");
         model.put("todayClaimed", orcidDigesterService.findBySingleDate(yesterday));
+        model.put("label2", "Who has claimed so far");
         model.put("totalClaimed", orcidDigesterService.findAllClaimed());
         mail.setModel(model);
         mailService.sendEmail(mail);
@@ -73,8 +74,9 @@ public class OrcidReportScheduler {
         Mail mail = new Mail(mailFrom, mailTo, subject, MAIL_TEMPLATE);
         Map<String, Object> model = new HashMap<>();
         model.put("mailHeader", String.format(mailHeader, "Weekly", lastWeek.format(ofPattern(DATE_FORMAT)), today.format(ofPattern(DATE_FORMAT))));
-        model.put("label", "Claiming from last week");
+        model.put("label1", "Claiming from last week");
         model.put("todayClaimed", orcidDigesterService.findByDates(lastWeek, today));
+        model.put("label2", "Who has claimed so far");
         model.put("totalClaimed", orcidDigesterService.findAllClaimed());
         mail.setModel(model);
         mailService.sendEmail(mail);

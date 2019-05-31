@@ -11,7 +11,7 @@
 
 <div style="padding-left: 20px; padding-top: 15px;">
 
-    <h3>${label} (${todayClaimed?size})</h3>
+    <h3>${label1} (${todayClaimed?size})</h3>
     <table style="background-color: transparent; border-spacing: 0; border-collapse: collapse; max-width: 100%; margin: 0 6px; width: 450px; border-bottom: 1px solid #e9e9e9;">
         <thead>
         <tr>
@@ -32,7 +32,7 @@
     </table>
 
 
-    <h3>${label} (${totalClaimed?size})</h3>
+    <h3>${label2} (${totalClaimed?size})</h3>
     <table style="background-color: transparent; border-spacing: 0; border-collapse: collapse; max-width: 100%; margin: 0 6px; width: 450px; border-bottom: 1px solid #e9e9e9;">
         <thead>
         <tr>
