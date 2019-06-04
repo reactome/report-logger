@@ -60,12 +60,13 @@ public class OrcidReportScheduler {
         model.put("label1", "Claiming for today");
         model.put("todayClaimed", orcidDigesterService.findBySingleDate(yesterday));
         model.put("label2", "Who has claimed so far");
-        model.put("totalClaimed", orcidDigesterService.findAllClaimed());
+        model.put("totalClaimed", orcidDigesterService.findAllClaimedByDate(yesterday));
         mail.setModel(model);
         mailService.sendEmail(mail);
     }
 
-    @Scheduled(cron = "0 0 12 * * SAT") // every Saturday at midday
+//    @Scheduled(cron = "0 0 12 * * SAT") // every Saturday at midday
+    @ResponseStatus(HttpStatus.OK)
     public void weeklyReport() {
         if (!matchesHostame()) return;
         LocalDateTime lastWeek = LocalDateTime.now().minusWeeks(1);

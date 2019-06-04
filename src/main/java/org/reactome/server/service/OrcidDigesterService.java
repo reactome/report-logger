@@ -24,6 +24,10 @@ public class OrcidDigesterService {
         return orcidDigesterRepository.findAllClaimed();
     }
 
+    public List<OrcidDigester> findAllClaimedByDate(LocalDateTime date) {
+        return orcidDigesterRepository.findAllClaimedByDate(Date.from(date.atZone(ZoneId.systemDefault()).toInstant()));
+    }
+
     public List<OrcidDigester> findBySingleDate(LocalDateTime date) {
         return orcidDigesterRepository.findBySingleDate(Date.from(date.atZone(ZoneId.systemDefault()).toInstant()));
     }

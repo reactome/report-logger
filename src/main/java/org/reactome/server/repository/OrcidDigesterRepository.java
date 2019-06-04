@@ -18,18 +18,25 @@ import java.util.List;
 @Repository
 public interface OrcidDigesterRepository extends JpaRepository<OrcidClaim, Long> {
 
-
     @Query(value = "SELECT new org.reactome.server.domain.OrcidDigester(ot.name, oc.orcid, count(distinct oc.stId)) " +
-                    "FROM OrcidClaim oc, OrcidToken ot " +
-                    "WHERE oc.orcid = ot.orcid " +
-                    "GROUP BY oc.orcid " +
-                    "ORDER BY count(distinct oc.stId) desc, ot.name")
+            "FROM OrcidClaim oc, OrcidToken ot " +
+            "WHERE oc.orcid = ot.orcid " +
+            "GROUP BY oc.orcid " +
+            "ORDER BY count(distinct oc.stId) desc, ot.name")
     List<OrcidDigester> findAllClaimed();
 
     @Query(value = "SELECT new org.reactome.server.domain.OrcidDigester(ot.name, oc.orcid, count(distinct oc.stId)) " +
                     "FROM OrcidClaim oc, OrcidToken ot " +
                     "WHERE oc.orcid = ot.orcid " +
-                    "AND   oc.created = :date " +
+                    "AND date(oc.created) <= :date " +
+                    "GROUP BY oc.orcid " +
+                    "ORDER BY count(distinct oc.stId) desc, ot.name")
+    List<OrcidDigester> findAllClaimedByDate(@Param("date") Date date);
+
+    @Query(value = "SELECT new org.reactome.server.domain.OrcidDigester(ot.name, oc.orcid, count(distinct oc.stId)) " +
+                    "FROM OrcidClaim oc, OrcidToken ot " +
+                    "WHERE oc.orcid = ot.orcid " +
+                    "AND   date(oc.created) = :date " +
                     "GROUP BY oc.orcid " +
                     "ORDER BY count(distinct oc.stId) desc, ot.name")
     List<OrcidDigester> findBySingleDate(@Param("date") Date date);
@@ -37,8 +44,8 @@ public interface OrcidDigesterRepository extends JpaRepository<OrcidClaim, Long>
     @Query(value = "SELECT new org.reactome.server.domain.OrcidDigester(ot.name, oc.orcid, count(distinct oc.stId)) " +
                     "FROM OrcidClaim oc, OrcidToken ot " +
                     "WHERE oc.orcid = ot.orcid " +
-                    "AND   oc.created >= :fromDate " +
-                    "AND   oc.created <= :toDate " +
+                    "AND   date(oc.created) >= :fromDate " +
+                    "AND   date(oc.created) <= :toDate " +
                     "GROUP BY oc.orcid " +
                     "ORDER BY count(distinct oc.stId) desc, ot.name")
     List<OrcidDigester> findByFromAndToDate(@Param("fromDate")Date fromDate, @Param("toDate")Date toDate);
