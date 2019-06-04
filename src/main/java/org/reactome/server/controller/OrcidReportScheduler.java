@@ -48,7 +48,7 @@ public class OrcidReportScheduler {
         this.hostname = hostname;
     }
 
-    @Scheduled(cron = "0 0 1 * * *") // every Saturday at midday
+    @Scheduled(cron = "0 0 12 * * *") // every Saturday at midday
     @ResponseStatus(HttpStatus.OK)
     public void dailyReport() {
         if (!matchesHostame()) return;
