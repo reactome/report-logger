@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -25,7 +26,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 @SuppressWarnings({"Duplicates", "FieldCanBeLocal"})
 @Component
 @EnableScheduling
-@RequestMapping("/digester2")
+@RequestMapping("/digester/orcid")
 public class OrcidReportScheduler {
 
     private final String MAIL_TEMPLATE = "orcid.ftl";
@@ -48,7 +49,7 @@ public class OrcidReportScheduler {
         this.hostname = hostname;
     }
 
-    @Scheduled(cron = "0 0 12 * * *") // every Saturday at midday
+    @GetMapping("/daily")
     @ResponseStatus(HttpStatus.OK)
     public void dailyReport() {
         if (!matchesHostame()) return;
@@ -65,7 +66,7 @@ public class OrcidReportScheduler {
         mailService.sendEmail(mail);
     }
 
-//    @Scheduled(cron = "0 0 12 * * SAT") // every Saturday at midday
+    @GetMapping("/weekly")
     @ResponseStatus(HttpStatus.OK)
     public void weeklyReport() {
         if (!matchesHostame()) return;
@@ -77,6 +78,24 @@ public class OrcidReportScheduler {
         model.put("mailHeader", String.format(mailHeader, "Weekly", lastWeek.format(ofPattern(DATE_FORMAT)), today.format(ofPattern(DATE_FORMAT))));
         model.put("label1", "Claiming from last week");
         model.put("todayClaimed", orcidDigesterService.findByDates(lastWeek, today));
+        model.put("label2", "Who has claimed so far");
+        model.put("totalClaimed", orcidDigesterService.findAllClaimed());
+        mail.setModel(model);
+        mailService.sendEmail(mail);
+    }
+
+    @Scheduled(cron = "0 0 12 1 * *") // every day 1 at 01AM
+    @ResponseStatus(HttpStatus.OK)
+    public void monthlyReport() {
+        if (!matchesHostame()) return;
+        LocalDateTime firstDayOfTheMonth = LocalDateTime.now().minusMonths(1);
+        LocalDateTime lastDayOfTheMonth = LocalDateTime.now().minusDays(1);
+        String subject = String.format(mailSubject, "Monthly", firstDayOfTheMonth.format(ofPattern(DATE_FORMAT)), lastDayOfTheMonth.format(ofPattern(DATE_FORMAT)));
+        Mail mail = new Mail(mailFrom, mailTo, subject, MAIL_TEMPLATE);
+        Map<String, Object> model = new HashMap<>();
+        model.put("mailHeader", String.format(mailHeader, "Monthly", firstDayOfTheMonth.format(ofPattern(DATE_FORMAT)), lastDayOfTheMonth.format(ofPattern(DATE_FORMAT))));
+        model.put("label1", "Claiming from last Month");
+        model.put("todayClaimed", orcidDigesterService.findByDates(firstDayOfTheMonth, lastDayOfTheMonth));
         model.put("label2", "Who has claimed so far");
         model.put("totalClaimed", orcidDigesterService.findAllClaimed());
         mail.setModel(model);
