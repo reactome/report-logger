@@ -228,7 +228,7 @@
                 <version>2.2</version>
                 <configuration>
                     <path>${deploymentPath}${project.build.finalName}</path>
-                    <port>5050</port>
+                    <port>8080</port>
                 </configuration>
             </plugin>
             <plugin>
