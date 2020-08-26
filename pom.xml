@@ -28,6 +28,7 @@
         <activation.version>1.1.1</activation.version>
         <commons.lang.version>3.7</commons.lang.version>
         <freemaker.version>2.3.28</freemaker.version>
+        <open.csv.version>5.2</open.csv.version>
 
         <maven.war.version>2.6</maven.war.version>
         <jdk.version>1.8</jdk.version>
@@ -164,6 +165,12 @@
             <version>2.6</version>
         </dependency>
 
+        <!-- CSV library -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${open.csv.version}</version>
+        </dependency>
 
         <!-- Test -->
         <dependency>
