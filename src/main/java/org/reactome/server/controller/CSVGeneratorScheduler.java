@@ -31,14 +31,11 @@ import static java.util.Calendar.YEAR;
 @RequestMapping("/csv")
 public class CSVGeneratorScheduler {
 
-
     private final String MAIL_TEMPLATE = "csv-email-notification.ftl";
     private final String DATE_FORMAT = "yyyy-MM-dd";
     private final String mailFrom;
     private final String mailTo;
     private String mailSubject = "[Search] %s report [%s to %s]";
-
-
     private MailService mailService;
     private String hostname;
     private String mailHeader = "%s report [%s to %s]";
@@ -46,6 +43,7 @@ public class CSVGeneratorScheduler {
     private TargetDigesterService targetDigesterService;
     private SearchDigesterService searchDigesterService;
     private CsvWriterService csvWriterService;
+
     private String folderPath;
     private Calendar calendar = Calendar.getInstance();
     private int year = calendar.get(YEAR);
@@ -132,18 +130,18 @@ public class CSVGeneratorScheduler {
     }
 
     /**
-     * Example url - http://localhost/report/csv/custom/johndoe@ebi.ac.uk?fromYMD=2020-05-04_12-00&toYMD=2020-05-11_12-00&label=Weeklyly
+     * Example url - http://localhost/report/csv/custom/johndoe@ebi.ac.uk?fromYMD=20200504_1200&toYMD=20200511_1200&label=Weeklyly
      *
      * @param email    to whom you want to send it
-     * @param fromDate format yyyy-MM-dd_HH-mm: 2020-05-04_12:00
-     * @param toDate   format yyyy-MM-dd_HH-mm: 2020-05-11_12:00
+     * @param fromDate format yyyyMMdd_HHmm: 20200504_1200
+     * @param toDate   format yyyyMMdd_HHmm: 20200511_1200
      * @param label    Free text to appear in the subject, yearly, weekly
      */
     @GetMapping(value = "/custom/{email:.+}")
     @ResponseStatus(HttpStatus.OK)
     public void testCustomReport(@PathVariable(name = "email") String email, @RequestParam(name = "fromYMD") String fromDate, @RequestParam(name = "toYMD") String toDate, @RequestParam(name = "label") String label) {
 
-        DateTimeFormatter formatter = ofPattern("yyyy-MM-dd_HH-mm");
+        DateTimeFormatter formatter = ofPattern("yyyyMMdd_HHmm");
         LocalDateTime fromLDT = LocalDateTime.parse(fromDate, formatter);
         LocalDateTime toLDT = LocalDateTime.parse(toDate, formatter);
         Map<String, List<TargetDigester>> reportMap = new HashMap<>();
