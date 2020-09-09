@@ -38,6 +38,7 @@ class ApplicationConfig {
         javaMailProperties.put("mail.smtp.auth", enableAuth);
         javaMailProperties.put("mail.transport.protocol", "smtp");
         javaMailProperties.put("mail.debug", "false");
+        javaMailProperties.put("mail.smtp.ssl.trust", "*");
 
         mailSender.setJavaMailProperties(javaMailProperties);
         return mailSender;
