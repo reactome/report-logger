@@ -18,6 +18,7 @@ import java.io.File;
 import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.*;
 
 
@@ -59,7 +60,6 @@ public class CSVGeneratorScheduler {
         this.hostname = hostname;
         this.folderPath = folderPath;
     }
-
 
     @Scheduled(cron = "0 0 12 * * SAT") // every Saturday at midday
     public void weeklyReport() {
@@ -110,7 +110,6 @@ public class CSVGeneratorScheduler {
         String reportPath = String.format("Quarterly/%d", year);
         String subject = String.format(mailSubject, "Quarterly", firstDayOfQuarter.format(ofPattern(DATE_FORMAT)), lastDayOfQuarter.format(ofPattern(DATE_FORMAT)));
         sendNotificationEmail("Quarterly", subject, reportPath, firstDayOfQuarter, lastDayOfQuarter, targetCSVFiles, searchCSVFiles);
-
     }
 
     @Scheduled(cron = "0 0 1 1 Jan *") // every day 1 at 01AM in January
@@ -130,17 +129,16 @@ public class CSVGeneratorScheduler {
     }
 
     /**
-     * Example url - http://localhost/report/csv/custom/johndoe@ebi.ac.uk?fromYMD=20200504_1200&toYMD=20200511_1200&label=Weeklyly
+     * Example url - http://localhost:8080/report/csv/custom/johndoe@ebi.ac.uk?from=20200504_1200&to=20200511_1200&label=Weekly
      *
      * @param email    to whom you want to send it
      * @param fromDate format yyyyMMdd_HHmm: 20200504_1200
      * @param toDate   format yyyyMMdd_HHmm: 20200511_1200
-     * @param label    Free text to appear in the subject, yearly, weekly
+     * @param label    Free text to appear in the subject, yearly, quarterly, monthly,weekly
      */
     @GetMapping(value = "/custom/{email:.+}")
     @ResponseStatus(HttpStatus.OK)
-    public void testCustomReport(@PathVariable(name = "email") String email, @RequestParam(name = "fromYMD") String fromDate, @RequestParam(name = "toYMD") String toDate, @RequestParam(name = "label") String label) {
-
+    public void customReportWithEmail(@PathVariable(name = "email") String email, @RequestParam(name = "from") String fromDate, @RequestParam(name = "to") String toDate, @RequestParam(name = "label") String label) {
         DateTimeFormatter formatter = ofPattern("yyyyMMdd_HHmm");
         LocalDateTime fromLDT = LocalDateTime.parse(fromDate, formatter);
         LocalDateTime toLDT = LocalDateTime.parse(toDate, formatter);
@@ -161,6 +159,52 @@ public class CSVGeneratorScheduler {
         model.put("reportPath", "Custom");
         mail.setModel(model);
         mailService.sendEmail(mail);
+    }
+
+    /**
+     * Example url - http://localhost:8080/report/csv/custom/?from=20200501_0100&to=20200521_0100&label=Monthly
+     *
+     * @param fromDate format yyyyMMdd_HHmm: 20200504_1200
+     * @param toDate   format yyyyMMdd_HHmm: 20200511_1200
+     * @param label    Free text to appear in the subject, yearly, quarterly, monthly, weekly
+     */
+    @GetMapping(value = "/custom/")
+    @ResponseStatus(HttpStatus.OK)
+    public void customReport(@RequestParam(name = "from") String fromDate, @RequestParam(name = "to") String toDate, @RequestParam(name = "label") String label) {
+        DateTimeFormatter formatter = ofPattern("yyyyMMdd_HHmm");
+        LocalDateTime fromLDT = LocalDateTime.parse(fromDate, formatter);
+        LocalDateTime toLDT = LocalDateTime.parse(toDate, formatter);
+        Map<String, List<TargetDigester>> reportMap = new HashMap<>();
+        getReports(reportMap, fromLDT, toLDT);
+
+        int yearFromParam = fromLDT.getYear();
+        //get month name
+        String monthFromParam = fromLDT.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
+        File dir;
+
+        switch (label.toLowerCase()) {
+            case "weekly":
+                dir = new File(folderPath + "/Weekly/" + yearFromParam + "/" + monthFromParam);
+                if (!dir.exists()) dir.mkdirs();
+                break;
+            case "monthly":
+                dir = new File(folderPath + "/Monthly/" + yearFromParam);
+                if (!dir.exists()) dir.mkdirs();
+                break;
+            case "quarterly":
+                dir = new File(folderPath + "/Quarterly/" + yearFromParam);
+                if (!dir.exists()) dir.mkdirs();
+                break;
+            case "yearly":
+                dir = new File(folderPath + "/Yearly/");
+                if (!dir.exists()) dir.mkdirs();
+                break;
+            default:
+                dir = new File(folderPath + "/Custom/");
+                if (!dir.exists()) dir.mkdirs();
+        }
+        csvWriterService.writeTargetToCSV(dir, fromLDT, toLDT, reportMap);
+        csvWriterService.writeSearchToCSV(dir, fromLDT, toLDT, reportMap);
     }
 
     @Autowired
@@ -196,7 +240,6 @@ public class CSVGeneratorScheduler {
     }
 
     private void getReports(Map<String, List<TargetDigester>> reportMap, LocalDateTime from, LocalDateTime to) {
-
         List<TargetDigester> targetSummary = targetDigesterService.findTargetsByDates(from, to);
         List<TargetDigester> targetRelevantSummary = new ArrayList<>();
         List<TargetDigester> targetSingleUsersSummary = new ArrayList<>();
