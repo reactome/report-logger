@@ -18,7 +18,6 @@ import java.io.File;
 import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.*;
 
 
@@ -161,51 +160,6 @@ public class CSVGeneratorScheduler {
         mailService.sendEmail(mail);
     }
 
-    /**
-     * Example url - http://localhost:8080/report/csv/custom/?from=20200501_0100&to=20200521_0100&label=Monthly
-     *
-     * @param fromDate format yyyyMMdd_HHmm: 20200504_1200
-     * @param toDate   format yyyyMMdd_HHmm: 20200511_1200
-     * @param label    Free text to appear in the subject, yearly, quarterly, monthly, weekly
-     */
-    @GetMapping(value = "/custom/")
-    @ResponseStatus(HttpStatus.OK)
-    public void customReport(@RequestParam(name = "from") String fromDate, @RequestParam(name = "to") String toDate, @RequestParam(name = "label") String label) {
-        DateTimeFormatter formatter = ofPattern("yyyyMMdd_HHmm");
-        LocalDateTime fromLDT = LocalDateTime.parse(fromDate, formatter);
-        LocalDateTime toLDT = LocalDateTime.parse(toDate, formatter);
-        Map<String, List<TargetDigester>> reportMap = new HashMap<>();
-        getReports(reportMap, fromLDT, toLDT);
-
-        int yearFromParam = fromLDT.getYear();
-        //get month name
-        String monthFromParam = fromLDT.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
-        File dir;
-
-        switch (label.toLowerCase()) {
-            case "weekly":
-                dir = new File(folderPath + "/Weekly/" + yearFromParam + "/" + monthFromParam);
-                if (!dir.exists()) dir.mkdirs();
-                break;
-            case "monthly":
-                dir = new File(folderPath + "/Monthly/" + yearFromParam);
-                if (!dir.exists()) dir.mkdirs();
-                break;
-            case "quarterly":
-                dir = new File(folderPath + "/Quarterly/" + yearFromParam);
-                if (!dir.exists()) dir.mkdirs();
-                break;
-            case "yearly":
-                dir = new File(folderPath + "/Yearly/");
-                if (!dir.exists()) dir.mkdirs();
-                break;
-            default:
-                dir = new File(folderPath + "/Custom/");
-                if (!dir.exists()) dir.mkdirs();
-        }
-        csvWriterService.writeTargetToCSV(dir, fromLDT, toLDT, reportMap);
-        csvWriterService.writeSearchToCSV(dir, fromLDT, toLDT, reportMap);
-    }
 
     @Autowired
     public void setMailService(MailService mailService) {
