@@ -20,7 +20,7 @@
         <hibernate.validator.version>6.0.9.Final</hibernate.validator.version>
         <spring.data.jpa.version>2.0.6.RELEASE</spring.data.jpa.version>
         <hikari.version>3.1.0</hikari.version>
-        <jackson.version>2.9.4</jackson.version>
+        <jackson.version>2.10.0.pr1</jackson.version>
         <h2.version>1.4.197</h2.version>
         <javax.servlet.version>4.0.0</javax.servlet.version>
         <uadetector.version>2014.10</uadetector.version>
