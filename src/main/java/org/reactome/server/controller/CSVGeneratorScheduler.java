@@ -45,9 +45,6 @@ public class CSVGeneratorScheduler {
     private CsvWriterService csvWriterService;
 
     private String folderPath;
-    private Calendar calendar = Calendar.getInstance();
-    private int year = calendar.get(YEAR);
-    private String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
 
 
     public CSVGeneratorScheduler(@Value("${mail.report.from}") String mailFrom,
@@ -67,8 +64,13 @@ public class CSVGeneratorScheduler {
         LocalDateTime today = LocalDateTime.now();
         Map<String, List<TargetDigester>> reportMap = new HashMap<>();
         getReports(reportMap, lastWeek, today);
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(YEAR);
+        String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
         File dir = new File(folderPath + "/Weekly/" + year + "/" + month);
         if (!dir.exists()) dir.mkdirs();
+
         List<File> targetCSVFiles = csvWriterService.writeTargetToCSV(dir, lastWeek, today, reportMap);
         List<File> searchCSVFiles = csvWriterService.writeSearchToCSV(dir, lastWeek, today, reportMap);
 
@@ -84,8 +86,12 @@ public class CSVGeneratorScheduler {
         LocalDateTime lastDayOfTheMonth = LocalDateTime.now().minusDays(1);
         Map<String, List<TargetDigester>> reportMap = new HashMap<>();
         getReports(reportMap, firstDayOfTheMonth, lastDayOfTheMonth);
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(YEAR);
         File dir = new File(folderPath + "/Monthly/" + year);
         if (!dir.exists()) dir.mkdirs();
+
         List<File> targetCSVFiles = csvWriterService.writeTargetToCSV(dir, firstDayOfTheMonth, lastDayOfTheMonth, reportMap);
         List<File> searchCSVFiles = csvWriterService.writeSearchToCSV(dir, firstDayOfTheMonth, lastDayOfTheMonth, reportMap);
 
@@ -94,15 +100,19 @@ public class CSVGeneratorScheduler {
         sendNotificationEmail("Monthly", subject, reportPath, firstDayOfTheMonth, lastDayOfTheMonth, targetCSVFiles, searchCSVFiles);
     }
 
-    @Scheduled(cron = "0 0 1 1 Jan,May,Sep *") // every day 1 at 01AM in Jan, May and Sep
+    @Scheduled(cron = " 0 0 1 1 Jan,Apr,Jul,Oct *") // every day 1 at 01AM in Jan, Apr,Jul, Oct
     public void quarterlyReport() {
         if (!matchesHostname()) return;
-        LocalDateTime firstDayOfQuarter = LocalDateTime.now().minusMonths(4);
+        LocalDateTime firstDayOfQuarter = LocalDateTime.now().minusMonths(3);
         LocalDateTime lastDayOfQuarter = LocalDateTime.now().minusDays(1);
         Map<String, List<TargetDigester>> reportMap = new HashMap<>();
         getReports(reportMap, firstDayOfQuarter, lastDayOfQuarter);
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(YEAR);
         File dir = new File(folderPath + "/Quarterly/" + year);
         if (!dir.exists()) dir.mkdirs();
+
         List<File> targetCSVFiles = csvWriterService.writeTargetToCSV(dir, firstDayOfQuarter, lastDayOfQuarter, reportMap);
         List<File> searchCSVFiles = csvWriterService.writeSearchToCSV(dir, firstDayOfQuarter, lastDayOfQuarter, reportMap);
 
