@@ -6,11 +6,11 @@ import java.util.Map;
  * @author Guilherme S Viteri <gviteri@ebi.ac.uk>
  */
 public class Mail {
-    private String from;
-    private String to;
-    private String subject;
+    private final String from;
+    private final String to;
+    private final String subject;
+    private final String template;
     private String content;
-    private String template;
 
     private Map<String, Object> model;
 

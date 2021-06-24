@@ -12,5 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface OrcidTokenRepository extends JpaRepository<OrcidToken, Long> {
 
     OrcidToken findByOrcid(String orcid);
+
     boolean deleteByOrcid(String orcid);
 }

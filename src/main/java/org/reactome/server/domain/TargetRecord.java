@@ -6,15 +6,16 @@ import javax.persistence.*;
 @Entity
 @Table(name = "target")
 @AssociationOverride(name = "userAgentType",
-                     joinColumns = @JoinColumn(name="uatype_id"),
-                     foreignKey = @ForeignKey(name = "FK_TR_UAT"))
+        joinColumns = @JoinColumn(name = "uatype_id"),
+        foreignKey = @ForeignKey(name = "FK_TR_UAT"))
 public class TargetRecord extends AbstractRecord {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "res_id", foreignKey = @ForeignKey(name = "FK_REP_TR"))
     private TargetResource targetResource;
 
-    public TargetRecord() {}
+    public TargetRecord() {
+    }
 
     public TargetRecord(String term) {
         this.term = term;

@@ -7,9 +7,9 @@ import java.io.Serializable;
  */
 public class TargetDigester implements Serializable {
 
-    private String term;
-    private Long count;
-    private Long uniqueIPs;
+    private final String term;
+    private final Long count;
+    private final Long uniqueIPs;
 
     public TargetDigester(String term, Long count, Long uniqueIPs) {
         this.term = term;

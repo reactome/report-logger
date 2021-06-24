@@ -9,7 +9,6 @@ import org.reactome.server.service.AnalysisReportRecordService;
 import org.reactome.server.service.UserAgentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +17,7 @@ public class AnalysisReportLoggerController {
 
     private AnalysisReportRecordService analysisReportRecordService;
     private UserAgentService userAgentService;
-    private UserAgentStringParser parser;
+    private final UserAgentStringParser parser;
 
     public AnalysisReportLoggerController() {
         parser = UADetectorServiceFactory.getResourceModuleParser();
@@ -40,7 +39,7 @@ public class AnalysisReportLoggerController {
     private UserAgentType getUserAgentType(String agent) {
         ReadableUserAgent rua = parser.parse(agent);
         String type = rua.getType().getName();
-        if (StringUtils.isEmpty(type)) {
+        if (type.isEmpty()) {
             type = "UNKNOWN";
         }
         UserAgentType uat = userAgentService.findByName(type);

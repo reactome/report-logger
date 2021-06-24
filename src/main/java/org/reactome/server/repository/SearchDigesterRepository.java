@@ -1,6 +1,5 @@
 package org.reactome.server.repository;
 
-import org.reactome.server.domain.SearchRecord;
 import org.reactome.server.domain.TargetDigester;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,9 +13,8 @@ import java.util.List;
  * @author Guilherme S Viteri <gviteri@ebi.ac.uk>
  */
 
-@SuppressWarnings("ALL")
 @Repository
-public interface SearchDigesterRepository extends JpaRepository<SearchRecord, Long> {
+public interface SearchDigesterRepository extends JpaRepository<TargetDigester, Long> {
 
     @Query(value = "SELECT new org.reactome.server.domain.TargetDigester(td.term, count(td), count(distinct td.ip)) " +
             "FROM SearchRecord td " +
@@ -25,5 +23,5 @@ public interface SearchDigesterRepository extends JpaRepository<SearchRecord, Lo
             "AND td.userAgentType.name NOT IN ('Robot','UNKNOWN') " +
             "GROUP BY td.term " +
             "ORDER BY count(distinct td.ip) desc, count(td) desc, td.term")
-    List<TargetDigester> findByFromAndToDate(@Param("fromDate")Date fromDate, @Param("toDate")Date toDate);
+    List<TargetDigester> findByFromAndToDate(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
 }

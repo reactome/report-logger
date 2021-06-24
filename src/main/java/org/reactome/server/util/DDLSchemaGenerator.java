@@ -6,7 +6,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Environment;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.hbm2ddl.SchemaUpdate;
-import org.reactome.server.Application;
+import org.reactome.server.ReportLoggerApplication;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 
@@ -27,9 +27,9 @@ public class DDLSchemaGenerator {
 
     private static final String DB_NAME = "report";
     private static final String DB_USER = "root";
-    private static final String DB_PASS = "";
-    private static String dbScript = "sql/ddl-report-##action##.sql";
-    private static Map<String, String> settings = new HashMap<>();
+    private static final String DB_PASS = "root123123";
+    private static final String dbScript = "sql/ddl-report-##action##.sql";
+    private static final Map<String, String> settings = new HashMap<>();
 
     static {
         System.setProperty(Environment.STORAGE_ENGINE, "innodb");
@@ -43,10 +43,10 @@ public class DDLSchemaGenerator {
 
     /**
      * Schema generator provides the DDL statement for DB creation and updates.
-     *
+     * <p>
      * 1) Create report database first and then run the schema generator
      * $> mysql -u <user> -p[password] -e "CREATE DATABASE IF NOT EXISTS <dbName>";
-     *
+     * <p>
      * 2) Run the DDLSchemaGenerator
      * 3)
      */
@@ -70,7 +70,7 @@ public class DDLSchemaGenerator {
     @SuppressWarnings({"ResultOfMethodCallIgnored", "Duplicates"})
     private static void create() {
         settings.put(Environment.HBM2DDL_AUTO, "create");
-        String dbFile = dbScript.replace("##action##", "create_"+ UUID.randomUUID());
+        String dbFile = dbScript.replace("##action##", "create_" + UUID.randomUUID());
         File script = new File(dbFile);
         if (script.exists()) script.delete();
 
@@ -82,7 +82,7 @@ public class DDLSchemaGenerator {
         schemaExport.setOutputFile(dbFile);
 
         PathMatchingResourcePatternResolver resourceLoader = new PathMatchingResourcePatternResolver();
-        new LocalSessionFactoryBuilder(null, resourceLoader, metadataSources).scanPackages(Application.class.getPackage().getName());
+        new LocalSessionFactoryBuilder(null, resourceLoader, metadataSources).scanPackages(ReportLoggerApplication.class.getPackage().getName());
 
         Metadata metadata = metadataSources.buildMetadata();
         schemaExport.createOnly(EnumSet.of(STDOUT, SCRIPT), metadata);
@@ -91,7 +91,7 @@ public class DDLSchemaGenerator {
     @SuppressWarnings({"ResultOfMethodCallIgnored", "Duplicates"})
     private static void update() {
         settings.put(Environment.HBM2DDL_AUTO, "update");
-        String dbFile = dbScript.replace("##action##", "update_"+ UUID.randomUUID());
+        String dbFile = dbScript.replace("##action##", "update_" + UUID.randomUUID());
         File script = new File(dbFile);
         if (script.exists()) script.delete();
 
@@ -103,7 +103,7 @@ public class DDLSchemaGenerator {
         schemaUpdate.setOutputFile(dbFile);
 
         PathMatchingResourcePatternResolver resourceLoader = new PathMatchingResourcePatternResolver();
-        new LocalSessionFactoryBuilder(null, resourceLoader, metadataSources).scanPackages(Application.class.getPackage().getName());
+        new LocalSessionFactoryBuilder(null, resourceLoader, metadataSources).scanPackages(ReportLoggerApplication.class.getPackage().getName());
 
         Metadata metadata = metadataSources.buildMetadata();
         schemaUpdate.execute(EnumSet.of(STDOUT, SCRIPT), metadata);

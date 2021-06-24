@@ -23,13 +23,15 @@ public class OrcidTokenController {
 
     @GetMapping(value = "/load/{orcid}")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody OrcidToken findByOrcid(@PathVariable String orcid) {
+    public @ResponseBody
+    OrcidToken findByOrcid(@PathVariable String orcid) {
         return orcidTokenService.findByOrcid(orcid);
     }
 
     @GetMapping(value = "/revoke/{orcid}")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody Boolean revoke(@PathVariable String orcid) {
+    public @ResponseBody
+    Boolean revoke(@PathVariable String orcid) {
         return orcidTokenService.revoke(orcid);
     }
 
