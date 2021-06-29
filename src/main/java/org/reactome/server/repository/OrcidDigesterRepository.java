@@ -1,5 +1,6 @@
 package org.reactome.server.repository;
 
+import org.reactome.server.domain.OrcidClaim;
 import org.reactome.server.domain.OrcidDigester;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +15,8 @@ import java.util.List;
  */
 
 @Repository
-public interface OrcidDigesterRepository extends JpaRepository<OrcidDigester, Long> {
+@SuppressWarnings("ALL")
+public interface OrcidDigesterRepository extends JpaRepository<OrcidClaim, Long> {
 
     @Query(value = "SELECT new org.reactome.server.domain.OrcidDigester(ot.name, oc.orcid, count(distinct oc.stId)) " +
             "FROM OrcidClaim oc, OrcidToken ot " +

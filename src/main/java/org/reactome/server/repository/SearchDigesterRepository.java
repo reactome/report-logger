@@ -1,5 +1,6 @@
 package org.reactome.server.repository;
 
+import org.reactome.server.domain.SearchRecord;
 import org.reactome.server.domain.TargetDigester;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +15,8 @@ import java.util.List;
  */
 
 @Repository
-public interface SearchDigesterRepository extends JpaRepository<TargetDigester, Long> {
+@SuppressWarnings("ALL")
+public interface SearchDigesterRepository extends JpaRepository<SearchRecord, Long> {
 
     @Query(value = "SELECT new org.reactome.server.domain.TargetDigester(td.term, count(td), count(distinct td.ip)) " +
             "FROM SearchRecord td " +
