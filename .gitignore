@@ -5,6 +5,7 @@ ntelliJ idea git ignore
 *.db
 
 /target
+/sql
 
 *.jar
 *.war
