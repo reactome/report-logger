@@ -1,5 +1,7 @@
 package org.reactome.server.domain;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -26,14 +28,16 @@ public abstract class AbstractRecord implements Serializable {
     protected String userAgent;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created")
+    @CreationTimestamp
     protected Date created;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "uatype_id")
     protected UserAgentType userAgentType;
 
-    AbstractRecord() {}
+    AbstractRecord() {
+    }
 
     public AbstractRecord(String term, String ip, String userAgent, Integer releaseNumber, UserAgentType userAgentType) {
         this.term = term;

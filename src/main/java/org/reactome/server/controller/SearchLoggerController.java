@@ -15,7 +15,6 @@ import org.reactome.server.util.SimpleRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -30,7 +29,7 @@ public class SearchLoggerController {
     private UserAgentService userAgentService;
     private TargetResourceService targetResourceService;
 
-    private UserAgentStringParser parser;
+    private final UserAgentStringParser parser;
 
     public SearchLoggerController() {
         parser = UADetectorServiceFactory.getResourceModuleParser();
@@ -80,7 +79,7 @@ public class SearchLoggerController {
     private UserAgentType getUserAgentType(String agent) {
         ReadableUserAgent rua = parser.parse(agent);
         String type = rua.getType().getName();
-        if (StringUtils.isEmpty(type)) {
+        if (type.isEmpty()) {
             type = "UNKNOWN";
         }
         UserAgentType uat = userAgentService.findByName(type);

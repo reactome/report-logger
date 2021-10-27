@@ -1,9 +1,7 @@
 package org.reactome.server.service;
 
 import org.reactome.server.domain.SearchRecord;
-import org.reactome.server.domain.TargetRecord;
 import org.reactome.server.repository.SearchRecordRepository;
-import org.reactome.server.repository.TargetRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;

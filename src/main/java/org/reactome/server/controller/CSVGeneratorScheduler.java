@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Calendar.YEAR;
 
@@ -35,16 +34,16 @@ public class CSVGeneratorScheduler {
     private final String DATE_FORMAT = "yyyy-MM-dd";
     private final String mailFrom;
     private final String mailTo;
-    private String mailSubject = "[Search] %s report [%s to %s]";
+    private final String mailSubject = "[Search] %s report [%s to %s]";
     private MailService mailService;
-    private String hostname;
-    private String mailHeader = "%s report [%s to %s]";
+    private final String hostname;
+    private final String mailHeader = "%s report [%s to %s]";
 
     private TargetDigesterService targetDigesterService;
     private SearchDigesterService searchDigesterService;
     private CsvWriterService csvWriterService;
 
-    private String folderPath;
+    private final String folderPath;
 
 
     public CSVGeneratorScheduler(@Value("${mail.report.from}") String mailFrom,
@@ -147,7 +146,10 @@ public class CSVGeneratorScheduler {
      */
     @GetMapping(value = "/custom/{email:.+}")
     @ResponseStatus(HttpStatus.OK)
-    public void customReportWithEmail(@PathVariable(name = "email") String email, @RequestParam(name = "from") String fromDate, @RequestParam(name = "to") String toDate, @RequestParam(name = "label") String label) {
+    public void customReportWithEmail(@PathVariable(name = "email") String email,
+                                      @RequestParam(name = "from") String fromDate,
+                                      @RequestParam(name = "to") String toDate,
+                                      @RequestParam(name = "label") String label) {
         DateTimeFormatter formatter = ofPattern("yyyyMMdd_HHmm");
         LocalDateTime fromLDT = LocalDateTime.parse(fromDate, formatter);
         LocalDateTime toLDT = LocalDateTime.parse(toDate, formatter);

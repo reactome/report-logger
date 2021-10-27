@@ -3,36 +3,32 @@ package org.reactome.server.test;
 import net.sf.uadetector.ReadableUserAgent;
 import net.sf.uadetector.UserAgentStringParser;
 import net.sf.uadetector.service.UADetectorServiceFactory;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.reactome.server.config.ReportJpaConfig;
+import org.junit.jupiter.api.Test;
 import org.reactome.server.domain.*;
 import org.reactome.server.repository.SearchRecordRepository;
 import org.reactome.server.repository.TargetRecordRepository;
 import org.reactome.server.repository.TargetResourceRepository;
 import org.reactome.server.repository.UserAgentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Example;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  * @author Guilherme S Viteri <gviteri@ebi.ac.uk>
  */
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(
-        classes = {ReportJpaConfig.class},
-        loader = AnnotationConfigContextLoader.class)
+@SpringBootTest
+@TestPropertySource("classpath:application-test.properties")
 @Transactional
 public class ReportDatabaseTest {
 
@@ -53,7 +49,7 @@ public class ReportDatabaseTest {
 
         searchRecordRepository.save(new SearchRecord("A6NCF5N", "192.168.10.12", userAgent, 64, uaBrowser));
 
-        assertTrue("SearchRecord must be 1", searchRecordRepository.findAll().size() == 1);
+        assertEquals(1, searchRecordRepository.findAll().size(), "SearchRecord must be 1");
     }
 
     @Test
@@ -103,6 +99,6 @@ public class ReportDatabaseTest {
         assertTrue(t.isPresent());
 
         TargetRecord target = t.get();
-        assertTrue(target.getTerm().equals("TTY12"));
+        assertEquals("TTY12", target.getTerm());
     }
 }

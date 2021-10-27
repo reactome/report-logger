@@ -10,10 +10,10 @@ import java.util.Objects;
 
 @Entity
 @Table(
-    name="target_resource",
-    uniqueConstraints = { @UniqueConstraint(columnNames = {"name"}, name="UK_TR_NAME") }
+        name = "target_resource",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"name"}, name = "UK_TR_NAME")}
 )
-public class TargetResource implements Serializable{
+public class TargetResource implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
