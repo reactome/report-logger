@@ -16,7 +16,7 @@ public class OrcidDigesterService {
     private final OrcidDigesterRepository orcidDigesterRepository;
 
     @Autowired
-    public OrcidDigesterService (OrcidDigesterRepository orcidDigesterRepository) {
+    public OrcidDigesterService(OrcidDigesterRepository orcidDigesterRepository) {
         this.orcidDigesterRepository = orcidDigesterRepository;
     }
 

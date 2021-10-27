@@ -1,24 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<configuration scan="true" scanPeriod="3 seconds">
-	<contextName>report</contextName>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress XmlUnboundNsPrefix -->
+<!--Logback official documentation:
+        The syntax of logback configuration files is extremely flexible.
+        As such, it is not possible to specify the allowed syntax with a DTD file or an XML schema.-->
+<configuration>
 
-	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder>
-			<pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{32} - %msg%n
-			</pattern>
-		</encoder>
-	</appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${logging.level}</level>
+        </filter>
+        <encoder>
+            <pattern>%d %-5level [%thread] %logger{0}: %msg%n</pattern>
+        </encoder>
+    </appender>
 
-	<jmxConfigurator />
-	<root level="INFO">
-		<appender-ref ref="STDOUT" />
-	</root>
+    <logger name="org.neo4j" level="ERROR"/> <!-- Remove neo4j info logging. It prints user credentials -->
+    <logger name="org.springframework" level="ERROR"/>
+    <logger name="org.reflections" level="WARN"/>
+    <logger name="springfox.documentation" level="WARN"/>
+    <logger name="org.hibernate" level="INFO"/>
 
-	<logger name="org.springframework" level="ERROR" />
-	<logger name="org.hibernate" level="ERROR" />
-	<logger name="com.zaxxer" level="ERROR" />
-	<logger name="net.sf.uadetector" level="ERROR" />
 
-	<logger name="org.reactome.server" level="ALL" />
+    <!--Root logger will log all messages to file that are not caught by other loggers-->
+    <root>
+        <appender-ref ref="STDOUT"/>
+    </root>
 </configuration>

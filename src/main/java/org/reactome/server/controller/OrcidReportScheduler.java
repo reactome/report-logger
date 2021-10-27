@@ -33,13 +33,13 @@ public class OrcidReportScheduler {
     private final String DATE_FORMAT = "yyyy-MM-dd";
     private final String mailFrom;
     private final String mailTo;
-    private String mailSubject = "[ORCID] %s claiming report [%s to %s]";
-    private String dailyMailSubject = "[ORCID] Claiming report for [%s]";
-    private String mailHeader = "%s report [%s to %s]";
-    private String dailyMailHeader = "Claiming report for %s";
+    private final String mailSubject = "[ORCID] %s claiming report [%s to %s]";
+    private final String dailyMailSubject = "[ORCID] Claiming report for [%s]";
+    private final String mailHeader = "%s report [%s to %s]";
+    private final String dailyMailHeader = "Claiming report for %s";
     private MailService mailService;
     private OrcidDigesterService orcidDigesterService;
-    private String hostname;
+    private final String hostname;
 
     public OrcidReportScheduler(@Value("${mail.report.from}") String mailFrom,
                                 @Value("${mail.report.to}") String mailTo,

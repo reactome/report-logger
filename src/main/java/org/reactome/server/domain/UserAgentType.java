@@ -10,13 +10,13 @@ import java.util.Objects;
 
 @Entity
 @Table(
-    name="user_agent_type",
-    uniqueConstraints = {
-        @UniqueConstraint(
-            columnNames = {"name"},
-            name="UK_UAT_NAME"
-        )
-    }
+        name = "user_agent_type",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        columnNames = {"name"},
+                        name = "UK_UAT_NAME"
+                )
+        }
 )
 public class UserAgentType implements Serializable {
 
@@ -28,7 +28,8 @@ public class UserAgentType implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    public UserAgentType() {}
+    public UserAgentType() {
+    }
 
     public UserAgentType(String name) {
         setName(name);

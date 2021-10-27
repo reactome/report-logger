@@ -25,7 +25,8 @@ public class OrcidClaimController {
 
     @GetMapping(value = "/load/{orcid}")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody List<OrcidClaim> loadByOrcid(@PathVariable String orcid) {
+    public @ResponseBody
+    List<OrcidClaim> loadByOrcid(@PathVariable String orcid) {
         return orcidClaimService.load(orcid);
     }
 

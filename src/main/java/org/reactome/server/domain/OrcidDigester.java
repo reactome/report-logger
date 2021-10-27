@@ -8,7 +8,8 @@ public class OrcidDigester {
     private String orcid;
     private long total;
 
-    public OrcidDigester(){}
+    public OrcidDigester() {
+    }
 
     public OrcidDigester(String name, String orcid, long total) {
         this.name = name;

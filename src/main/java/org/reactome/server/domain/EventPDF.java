@@ -8,7 +8,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "event_pdf")
 @AssociationOverride(name = "userAgentType",
-        joinColumns = @JoinColumn(name="uatype_id"),
+        joinColumns = @JoinColumn(name = "uatype_id"),
         foreignKey = @ForeignKey(name = "FK_EP_UAT"))
 public class EventPDF implements Serializable {
 
@@ -40,7 +40,8 @@ public class EventPDF implements Serializable {
     @JoinColumn(name = "uatype_id")
     private UserAgentType userAgentType;
 
-    EventPDF() {}
+    public EventPDF() {
+    }
 
     public EventPDF(String ip, Long waitingTime, Long reportTime, Integer pages, String userAgent, UserAgentType userAgentType) {
         this.ip = ip;

@@ -8,7 +8,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "analysis_report")
 @AssociationOverride(name = "userAgentType",
-        joinColumns = @JoinColumn(name="uatype_id"),
+        joinColumns = @JoinColumn(name = "uatype_id"),
         foreignKey = @ForeignKey(name = "FK_AR_UAT"))
 public class AnalysisReportRecord implements Serializable {
 
@@ -40,7 +40,8 @@ public class AnalysisReportRecord implements Serializable {
     @JoinColumn(name = "uatype_id")
     private UserAgentType userAgentType;
 
-    AnalysisReportRecord() {}
+    public AnalysisReportRecord() {
+    }
 
     public AnalysisReportRecord(String ip, Long waitingTime, Long reportTime, Integer pages, String userAgent, UserAgentType userAgentType) {
         this.ip = ip;

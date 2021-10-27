@@ -14,8 +14,8 @@ import java.util.List;
  * @author Guilherme S Viteri <gviteri@ebi.ac.uk>
  */
 
-@SuppressWarnings("ALL")
 @Repository
+@SuppressWarnings("ALL")
 public interface SearchDigesterRepository extends JpaRepository<SearchRecord, Long> {
 
     @Query(value = "SELECT new org.reactome.server.domain.TargetDigester(td.term, count(td), count(distinct td.ip)) " +
@@ -25,5 +25,5 @@ public interface SearchDigesterRepository extends JpaRepository<SearchRecord, Lo
             "AND td.userAgentType.name NOT IN ('Robot','UNKNOWN') " +
             "GROUP BY td.term " +
             "ORDER BY count(distinct td.ip) desc, count(td) desc, td.term")
-    List<TargetDigester> findByFromAndToDate(@Param("fromDate")Date fromDate, @Param("toDate")Date toDate);
+    List<TargetDigester> findByFromAndToDate(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
 }
