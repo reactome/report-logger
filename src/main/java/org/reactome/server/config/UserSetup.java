@@ -7,8 +7,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- *  To have this configuration here to fix BeanCurrentlyInCreationException, details are below
- *  <a href="https://stackoverflow.com/questions/70130209/beancurrentlyincreationexception-after-upgrading-boot-to-2-6">...</a>
+ * To have this configuration here to fix BeanCurrentlyInCreationException, details are below
+ * <a href="https://stackoverflow.com/questions/70130209/beancurrentlyincreationexception-after-upgrading-boot-to-2-6">...</a>
  */
 
 @Configuration
@@ -17,7 +17,7 @@ public class UserSetup {
     private final String user;
     private final String password;
 
-    public UserSetup(@Value("${report.user}")String user,
+    public UserSetup(@Value("${report.user}") String user,
                      @Value("${report.password}") String password) {
         this.user = user;
         this.password = password;
@@ -30,5 +30,4 @@ public class UserSetup {
                 .withUser(user).password(passwordEncoded)
                 .authorities("ROLE_REPORTER");
     }
-
 }
