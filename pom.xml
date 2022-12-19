@@ -1,40 +1,34 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.reactome.server</groupId>
     <artifactId>report-logger</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 
     <packaging>war</packaging>
     <name>report-logger</name>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.6</version>
+        <groupId>org.reactome.server</groupId>
+        <artifactId>reactome-parent</artifactId>
+        <version>1.0.0</version>
     </parent>
 
     <organization>
         <name>The European Bioinformatics Institute</name>
-        <url>http://www.ebi.ac.uk/</url>
+        <url>https://www.ebi.ac.uk/</url>
     </organization>
 
     <properties>
-        <deploymentPath>/</deploymentPath>
-        <uadetector.version>2014.10</uadetector.version>
-        <open.csv.version>5.2</open.csv.version>
-        <commons-io.version>2.8.0</commons-io.version>
 
-        <maven.war.version>2.8.0</maven.war.version>
-        <jdk.version>11</jdk.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <deploymentPath>/</deploymentPath>
+
     </properties>
 
     <dependencies>
         <!-- Spring Boot -->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -110,14 +104,12 @@
         <dependency>
             <groupId>net.sf.uadetector</groupId>
             <artifactId>uadetector-resources</artifactId>
-            <version>${uadetector.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
         </dependency>
 
         <!-- CSV library -->
@@ -175,8 +167,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
             <plugin>
