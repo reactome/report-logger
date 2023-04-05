@@ -76,6 +76,11 @@
             <groupId>com.sun.activation</groupId>
             <artifactId>javax.activation</artifactId>
         </dependency>
+        <!-- Fix JAXBException when deploy to server -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
 
         <!-- lightweight and lightning fast JDBC connection pooling framework -->
         <dependency>
